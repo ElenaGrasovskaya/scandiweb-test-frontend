@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import Product from "../components/Product";
-import ProductList from "../components/ProductList"
+import { connect } from "react-redux";
 
 const PRODUCTS_LIST_QUERY = gql`
   query PRODUCTS_LIST_QUERY {
@@ -39,16 +39,14 @@ const PRODUCTS_LIST_QUERY = gql`
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {currentCategory: localStorage.getItem("currentCategory")};
+    this.state = { currentCategory: props.currentCategory };
   }
-    
+
   render() {
-      
     const { categories, error, loading } = this.props.data;
 
     let productList = [];
     if (!loading && !error) {
-      
       categories.forEach((element) => {
         if (element.name === this.state.currentCategory) {
           productList = [...element.products];
@@ -59,12 +57,31 @@ class HomeScreen extends Component {
       return (
         <div>
           <h1>{this.state.currentCategory}</h1>
-          <ProductList productList={productList} currentCategory = {this.state.currentCategory} />
-         
+          <div>
+            {productList.map((product, index) => (
+              <Product
+                id={product.id}
+                name={product.name}
+                description={product.description}
+                prices={product.prices}
+                brand={product.brand}
+                gallery={product.gallery}
+                key={Math.round(Math.random() * 10000)}
+              />
+            ))}
+          </div>
         </div>
       );
     } else return <div>No data loaded</div>;
   }
 }
 
-export default graphql(PRODUCTS_LIST_QUERY)(HomeScreen);
+function mapStateToProps(state) {
+  const category = state.category;
+
+  return category;
+}
+
+export default connect(mapStateToProps)(
+  graphql(PRODUCTS_LIST_QUERY)(HomeScreen)
+);
