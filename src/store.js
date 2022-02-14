@@ -26,8 +26,8 @@ const currentCurrencyFromStorage = localStorage.getItem("currentCurrency")
 
 const initialState = {
   cart: { cartItems: cartItemsFromStorage },
-  category: {currentCategory: currentCategoryFromStorage, categories: [] },
-  currency:{ currentCurrency: currentCurrencyFromStorage, currencies: []},
+  category: { categories: [], currentCategory: currentCategoryFromStorage },
+  currency: { currentCurrency: currentCurrencyFromStorage, currencies: []},
 };
 
 const middleware = [thunk];

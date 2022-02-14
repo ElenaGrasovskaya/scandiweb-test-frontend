@@ -77,9 +77,7 @@ class HomeScreen extends Component {
 }
 
 function mapStateToProps(state) {
-  const category = state.category;
-
-  return category;
+   return state;
 }
 
 export default connect(mapStateToProps)(

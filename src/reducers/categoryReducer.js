@@ -1,22 +1,14 @@
-import { bindActionCreators } from "redux";
-import { CATEGORY_LOAD_LIST, CATEGORY_CHANGE } from "../constants/constants";
+import { CATEGORY_LIST, CATEGORY_CHANGE } from "../constants/constants";
 
-export const categoryReducer = (
-  state = { currentCategory: "", categories: [] },
-  action
-) => {
+export const categoryReducer = (state = {}, action) => {
   switch (action.type) {
-
-    case CATEGORY_LOAD_LIST:
-      return {
-        ...state,
-        categories: action.payload,
-      };
+    case CATEGORY_LIST:
+      return { ...state, categories: action.category.categories };
 
     case CATEGORY_CHANGE:
       return {
         ...state,
-        currentCategory: action.payload,
+        currentCategory: action.category.currentCategory,
       };
 
     default:

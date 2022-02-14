@@ -2,53 +2,57 @@ import React, { Component } from "react";
 import Currency from "./Currency";
 import Category from "./Category";
 import Cart from "./Cart";
-import { gql } from "apollo-boost";
-import { graphql } from "react-apollo";
-
-const CATEGORY_LIST_QUERY = gql`
-  query PRODUCTS_LIST_QUERY {
-    categories {
-      name
-    }
-  }
-`;
-
-
+import { connect } from "react-redux";
 
 class Header extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {currentCategory: localStorage.getItem("currentCategory")||"all"};
-      }
-    
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentCategory: localStorage.getItem("currentCategory") || "all",
+    };
+  }
+
   render() {
-    const { categories, error, loading } = this.props.data;
+    //const { category, error, loading } = this.props.data;
 
     const currentCurrency = "USD";
-    localStorage.setItem("currentCategory", this.state.currentCategory);
+    //const categoryList = Category.handleCategoryList();
+    //localStorage.setItem("currentCategory", this.state.currentCategory);
     localStorage.setItem("currentCurrency", currentCurrency);
-    console.log("Header category", categories);
-    
-    
-    if (!error && !loading) {
+   // console.log("Header category", categoryList);
+
+   /* if (!error && !loading) {
       return (
         <div className='Header'>
           <ul>
             {categories.map((category, index) => (
-              <li key={index} ><a href="#" onClick = {()=>{
-                  this.state.currentCategory = category.name;
-                  localStorage.setItem("currentCategory", category.name); 
-            
-            }}>{category.name}</a></li>
+              <li key={index}>
+                <a
+                  href='#'
+                  onClick={() => {
+                    this.state.currentCategory = category.name;
+                    localStorage.setItem("currentCategory", category.name);
+                  }}
+                >
+                  {category.name}
+                </a>
+              </li>
             ))}
           </ul>
-          Header <Currency /> <Category /> <Cart />
+          <Category /> <Currency /> <Cart />
         </div>
       );
-    }
-    else return null;
+    } else
+    */ return <><Category /> <Currency /> <Cart /></>;
   }
 }
 
 
-export default graphql(CATEGORY_LIST_QUERY)(Header);
+
+function mapStateToProps(state) {
+
+  return state;
+}
+
+export default connect(mapStateToProps)(Header);
+
