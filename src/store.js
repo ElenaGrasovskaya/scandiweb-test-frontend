@@ -4,7 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { cartReducer } from "./reducers/cartReducer";
 import { categoryReducer } from "./reducers/categoryReducer";
 import { currencyReducer } from "./reducers/currencyReducer";
-import { START_CATEGORY, START_CURRENCY } from "./constants/constants";
+import { START_CATEGORY, START_CURRENCY_LABEL, START_CURRENCY_SYMBOL } from "./constants/constants";
 
 const reducer = combineReducers({
   cart: cartReducer,
@@ -20,14 +20,17 @@ const currentCategoryFromStorage = localStorage.getItem("currentCategory")
   ?(localStorage.getItem("currentCategory"))
   : START_CATEGORY;
 
-const currentCurrencyFromStorage = localStorage.getItem("currentCurrency")
-  ?(localStorage.getItem("currentCurrency"))
-  : START_CURRENCY;
+const currentCurrencyLabel = localStorage.getItem("currentCurrencyLabel")
+  ?(localStorage.getItem("currentCurrencyLabel"))
+  : START_CURRENCY_LABEL;
+  const currentCurrencySymbol = localStorage.getItem("currentCurrencySymbol")
+  ?(localStorage.getItem("currentCurrencySymbol"))
+  : START_CURRENCY_SYMBOL;
 
 const initialState = {
   cart: { cartItems: cartItemsFromStorage },
   category: { categories: [], currentCategory: currentCategoryFromStorage },
-  currency: { currentCurrency: currentCurrencyFromStorage, currencies: []},
+  currency: { currentCurrency: {label:currentCurrencyLabel, symbol:currentCurrencySymbol}, currencies: []},
 };
 
 const middleware = [thunk];

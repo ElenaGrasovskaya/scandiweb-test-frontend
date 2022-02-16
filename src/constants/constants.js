@@ -5,8 +5,10 @@ export const CART_CLEAR_ITEMS = "CART_CLEAR_ITEMS";
 export const CATEGORY_LIST = "CATEGORY_LIST";
 export const CATEGORY_CHANGE = "CATEGORY_CHANGE";
 
-export const CURRENCY_LOAD_LIST = "CURRENCY_LIST";
+export const CURRENCY_LIST = "CURRENCY_LIST";
 export const CURRENCY_CHANGE = "CURRENCY_CHANGE";
 
-export const START_CATEGORY = "tech";
-export const START_CURRENCY = "USD";
+export const START_CATEGORY = "all";
+export const START_CURRENCY_SYMBOL = "$";
+export const START_CURRENCY_LABEL = "USD";
+

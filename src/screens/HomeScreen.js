@@ -3,6 +3,28 @@ import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import Product from "../components/Product";
 import { connect } from "react-redux";
+import styled from "styled-components";
+const StyledHomeScreen = styled.div`
+margin: 20vh 10vh;
+ 
+`;
+const StyledProductList = styled.section`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5vw;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: flex-start;
+  
+`;
+const StyledHeading = styled.h1`
+  font-size: 3rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-left: 1rem;
+  
+`;
 
 const PRODUCTS_LIST_QUERY = gql`
   query PRODUCTS_LIST_QUERY {
@@ -39,11 +61,19 @@ const PRODUCTS_LIST_QUERY = gql`
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentCategory: props.currentCategory };
+    this.state = { currentCategory: props.category.currentCategory };
   }
 
   render() {
     const { categories, error, loading } = this.props.data;
+    if (this.state.currentCategory !== this.props.category.currentCategory) {
+      this.setState({ currentCategory: this.props.category.currentCategory });
+    }
+    console.log("HomeScreen", this.props );
+    localStorage.setItem("currentCategory", this.props.category.currentCategory);
+    localStorage.setItem("currentCurrencyLabel", this.props.currency.currentCurrency.label);
+    localStorage.setItem("currentCurrencySymbol", this.props.currency.currentCurrency.symbol);
+
 
     let productList = [];
     if (!loading && !error) {
@@ -51,15 +81,15 @@ class HomeScreen extends Component {
         if (element.name === this.state.currentCategory) {
           productList = [...element.products];
         }
+
       });
 
-      console.log("productList", productList);
       return (
-        <div>
-          <h1>{this.state.currentCategory}</h1>
-          <div>
-            {productList.map((product, index) => (
-              <Product
+        <StyledHomeScreen>
+          <StyledHeading>{this.state.currentCategory}</StyledHeading>
+          <StyledProductList>
+            {productList.map((product) => (
+              <Product 
                 id={product.id}
                 name={product.name}
                 description={product.description}
@@ -69,15 +99,15 @@ class HomeScreen extends Component {
                 key={Math.round(Math.random() * 10000)}
               />
             ))}
-          </div>
-        </div>
+          </StyledProductList>
+        </StyledHomeScreen>
       );
     } else return <div>No data loaded</div>;
   }
 }
 
 function mapStateToProps(state) {
-   return state;
+  return state;
 }
 
 export default connect(mapStateToProps)(

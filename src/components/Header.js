@@ -3,56 +3,43 @@ import Currency from "./Currency";
 import Category from "./Category";
 import Cart from "./Cart";
 import { connect } from "react-redux";
+import styled from "styled-components";
+import logo from "../assets/logo.svg";
+
+const StyledHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 9fr 1fr 1fr;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 7vh;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+`;
+const StyledLogo = styled.div`
+  margin: auto;
+`;
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentCategory: localStorage.getItem("currentCategory") || "all",
-    };
-  }
-
   render() {
-    //const { category, error, loading } = this.props.data;
-
-    const currentCurrency = "USD";
-    //const categoryList = Category.handleCategoryList();
-    //localStorage.setItem("currentCategory", this.state.currentCategory);
-    localStorage.setItem("currentCurrency", currentCurrency);
-   // console.log("Header category", categoryList);
-
-   /* if (!error && !loading) {
-      return (
-        <div className='Header'>
-          <ul>
-            {categories.map((category, index) => (
-              <li key={index}>
-                <a
-                  href='#'
-                  onClick={() => {
-                    this.state.currentCategory = category.name;
-                    localStorage.setItem("currentCategory", category.name);
-                  }}
-                >
-                  {category.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <Category /> <Currency /> <Cart />
-        </div>
-      );
-    } else
-    */ return <><Category /> <Currency /> <Cart /></>;
+    return (
+      <>
+        <StyledHeader>
+          <Category />
+          <StyledLogo>
+            <img src={logo} height='35vh' width='35vw' />
+          </StyledLogo>{" "}
+          <Currency /> <Cart />
+        </StyledHeader>
+      </>
+    );
   }
 }
 
-
-
 function mapStateToProps(state) {
-
   return state;
 }
 
 export default connect(mapStateToProps)(Header);
-

@@ -4,9 +4,36 @@ import { bindActionCreators } from "redux";
 import { changeCategory, categoryLoadList } from "../actions/categoryActions";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
+import styled from "styled-components";
+
+const StyledList = styled.ul`
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  justify-content: space-evenly;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  gap: 1rem;
+  margin: auto;
+`;
+
+const StyledItem = styled.li`
+  display: block;
+  height: 7vh;
+
+  position: relative;
+  min-width: 5vw;
+`;
+
+const StyledLink = styled.a`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const CATEGORY_LIST_QUERY = gql`
-  query PRODUCTS_LIST_QUERY {
+  query CATEGORY_LIST_QUERY {
     categories {
       name
     }
@@ -17,29 +44,27 @@ class Category extends Component {
     return this.props.changeCategory(newCategory);
   };
   handleCategoryLoadList = (categoryList) => {
-    this.props.categoryLoadList(categoryList);
+    return this.props.categoryLoadList(categoryList);
   };
 
   render() {
-    console.log(this.props);
     const { categories, error, loading } = this.props.data;
-    let categoryList=[];
-    (!error&&!loading)?categoryList = categories.map((category)=>(category.name)):categoryList=[];
-    console.log(categoryList);
-
-
+    let categoryList = [];
+    !error && !loading
+      ? (categoryList = categories.map((category) => category.name))
+      : (categoryList = []);
 
     return (
       <>
-        <button onClick={() => this.handleChangeCategory("sfsf")}>
-          Change
-        </button>
-        ;
-        <button onClick={() => this.handleCategoryLoadList(categoryList)}>
-          Load
-        </button>
-        ;
-        <ul>{(categoryList.map((category, index)=>(<li key={index}>{category}</li>)))}</ul>
+        <StyledList onLoad={() => this.handleCategoryLoadList(categoryList)}>
+          {categoryList.map((category, index) => (
+            <StyledItem key={index}>
+              <StyledLink onClick={() => this.handleChangeCategory(category)}>
+                {category}
+              </StyledLink>
+            </StyledItem>
+          ))}
+        </StyledList>
       </>
     );
   }

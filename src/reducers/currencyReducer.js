@@ -1,24 +1,21 @@
-import { bindActionCreators } from "redux";
-import { CURRENCY_LOAD_LIST, CURRENCY_CHANGE } from "../constants/constants";
+import { CURRENCY_LIST, CURRENCY_CHANGE } from "../constants/constants";
 
-export const currencyReducer = (
-  state = { currentCategory: "", categories: [] },
-  action
-) => {
+export const currencyReducer = (state = {}, action) => {
   switch (action.type) {
-    case CURRENCY_LOAD_LIST:
-      return {
-        ...state,
-        currencies: action.payload,
-      };
+    case CURRENCY_LIST:
+      return { ...state, currencies: action.currency.currencies };
 
     case CURRENCY_CHANGE:
       return {
         ...state,
-        currentCurrency: action.payload,
+        currentCurrency: {
+          label: action.currency.currentCurrency.label,
+          symbol: action.currency.currentCurrency.symbol
+        }
       };
 
     default:
       return state;
   }
 };
+
