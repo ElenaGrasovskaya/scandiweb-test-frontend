@@ -5,19 +5,7 @@ import { changeCurrency, currencyLoadList } from "../actions/currencyActions";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import styled from "styled-components";
-const StyledDropdownContainer = styled.div`
-  position: relative;
-`;
 
-const StyledDropdown = styled.div`
-  position: absolute;
-  background-color: white;
-  width: 7rem;
-  list-style: none;
-  display:flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
 const CURRENCY_LIST_QUERY = gql`
   query CURRENCY_LIST_QUERY {
     currencies {
@@ -26,8 +14,8 @@ const CURRENCY_LIST_QUERY = gql`
     }
   }
 `;
+
 class Currency extends Component {
-  
   handleChangeCurrency = (label, symbol) => {
     return this.props.changeCurrency(label, symbol);
   };
@@ -35,16 +23,26 @@ class Currency extends Component {
     return this.props.currencyLoadList(currencyList);
   };
 
+  constructor(props) {
+    super(props);
+    this.state = { clicked: false };
+  }
+
   render() {
     const { currencies, error, loading } = this.props.data;
-    console.log("currencyList", currencies);
-    console.log("currencyState", this.state);
+
 
     if (!error && !loading) {
       return (
         <StyledDropdownContainer>
-          <h2>{this.props.currency.currentCurrency.symbol}</h2>
-          <StyledDropdown>
+          <h2 onClick={() => this.setState({ clicked: !this.state.clicked })}>
+            {this.props.currency.currentCurrency.symbol}
+            <StyledArrow clicked={this.state.clicked}>&#62;</StyledArrow>
+          </h2>
+          <StyledDropdown
+            clicked={this.state.clicked}
+            onClick={() => this.setState({ clicked: !this.state.clicked })}
+          >
             {currencies.map((currency, index) => (
               <li
                 onClick={() =>
@@ -81,3 +79,43 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(graphql(CURRENCY_LIST_QUERY)(Currency));
+
+const StyledDropdownContainer = styled.div`
+  position: relative;
+  user-select: none;
+
+`;
+
+const StyledArrow = styled.span`
+  display: block;
+  position: absolute;
+  left: 2.2rem;
+  top: 1.8rem;
+  font-size: 0.8em;
+  font-weight: 200;
+
+  transform: ${(props) => (props.clicked ? "rotate(-90deg)" : "rotate(90deg)")};
+  transition: all 0.2s ease;
+`;
+
+const StyledDropdown = styled.ul`
+  position: absolute;
+  left: 1.2rem;
+  top: 3rem;
+  margin: 0;
+  padding: 1rem;
+  background-color: white;
+  width: 5rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  display: ${(props) => (props.clicked ? "flex" : "none")};
+  opacity: ${(props) => (props.clicked ? "100%" : "0%")};
+  transition: opacity 0.2s ease;
+  & li:hover {
+    display: block;
+    color: green;
+  }
+`;

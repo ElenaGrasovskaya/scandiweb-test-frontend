@@ -8,6 +8,7 @@ import logo from "../assets/logo.svg";
 
 const StyledHeader = styled.div`
   display: grid;
+  z-index: 100;
   grid-template-columns: 1fr 9fr 1fr 1fr;
   position: fixed;
   top: 0;
@@ -29,7 +30,7 @@ class Header extends Component {
         <StyledHeader>
           <Category />
           <StyledLogo>
-            <img src={logo} height='35vh' width='35vw' />
+            <img src={logo} height='40rem' width='40rem' />
           </StyledLogo>{" "}
           <Currency /> <Cart />
         </StyledHeader>

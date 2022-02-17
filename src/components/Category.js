@@ -23,6 +23,12 @@ const StyledItem = styled.li`
 
   position: relative;
   min-width: 5vw;
+  border-bottom: 3px solid white;
+  transition: all 0.2s ease; 
+  &:hover {
+    color: green;
+    border-bottom: 3px solid green;
+  }
 `;
 
 const StyledLink = styled.a`

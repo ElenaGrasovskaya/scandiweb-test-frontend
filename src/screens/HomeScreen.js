@@ -4,27 +4,7 @@ import { graphql } from "react-apollo";
 import Product from "../components/Product";
 import { connect } from "react-redux";
 import styled from "styled-components";
-const StyledHomeScreen = styled.div`
-margin: 20vh 10vh;
- 
-`;
-const StyledProductList = styled.section`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 5vw;
-  align-items: flex-start;
-  align-content: flex-start;
-  justify-content: flex-start;
-  
-`;
-const StyledHeading = styled.h1`
-  font-size: 3rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  margin-left: 1rem;
-  
-`;
+
 
 const PRODUCTS_LIST_QUERY = gql`
   query PRODUCTS_LIST_QUERY {
@@ -61,7 +41,7 @@ const PRODUCTS_LIST_QUERY = gql`
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentCategory: props.category.currentCategory };
+    this.state = { currentCategory: [] };
   }
 
   render() {
@@ -69,7 +49,7 @@ class HomeScreen extends Component {
     if (this.state.currentCategory !== this.props.category.currentCategory) {
       this.setState({ currentCategory: this.props.category.currentCategory });
     }
-    console.log("HomeScreen", this.props );
+
     localStorage.setItem("currentCategory", this.props.category.currentCategory);
     localStorage.setItem("currentCurrencyLabel", this.props.currency.currentCurrency.label);
     localStorage.setItem("currentCurrencySymbol", this.props.currency.currentCurrency.symbol);
@@ -113,3 +93,26 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(
   graphql(PRODUCTS_LIST_QUERY)(HomeScreen)
 );
+
+
+const StyledHomeScreen = styled.div`
+margin: 20vh 10vh;
+ 
+`;
+const StyledProductList = styled.section`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5vw;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: flex-start;
+  
+`;
+const StyledHeading = styled.h1`
+  font-size: 3rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-left: 1rem;
+  
+`;
