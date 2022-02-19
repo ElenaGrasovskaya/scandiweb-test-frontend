@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import Product from "../components/Product";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
-
+import { saveCurrentProduct } from "../actions/currentProductActions";
+import { bindActionCreators } from "redux";
 
 const PRODUCTS_LIST_QUERY = gql`
   query PRODUCTS_LIST_QUERY {
@@ -43,17 +45,36 @@ class HomeScreen extends Component {
     super(props);
     this.state = { currentCategory: [] };
   }
+  handleSaveCurrentProduct = (product) => {
+    return this.props.saveCurrentProduct(product);
+  };
 
-  render() {
-    const { categories, error, loading } = this.props.data;
+  componentDidUpdate() {
+   
     if (this.state.currentCategory !== this.props.category.currentCategory) {
       this.setState({ currentCategory: this.props.category.currentCategory });
     }
+  }
 
-    localStorage.setItem("currentCategory", this.props.category.currentCategory);
-    localStorage.setItem("currentCurrencyLabel", this.props.currency.currentCurrency.label);
-    localStorage.setItem("currentCurrencySymbol", this.props.currency.currentCurrency.symbol);
+  render() {
+    
+   
 
+    localStorage.setItem(
+      "currentCategory",
+      this.props.category.currentCategory
+    );
+    localStorage.setItem(
+      "currentCurrencyLabel",
+      this.props.currency.currentCurrency.label
+    );
+    localStorage.setItem(
+      "currentCurrencySymbol",
+      this.props.currency.currentCurrency.symbol
+    );
+
+    const { categories, error, loading } = this.props.data;
+    
 
     let productList = [];
     if (!loading && !error) {
@@ -61,7 +82,6 @@ class HomeScreen extends Component {
         if (element.name === this.state.currentCategory) {
           productList = [...element.products];
         }
-
       });
 
       return (
@@ -69,15 +89,22 @@ class HomeScreen extends Component {
           <StyledHeading>{this.state.currentCategory}</StyledHeading>
           <StyledProductList>
             {productList.map((product) => (
-              <Product 
-                id={product.id}
-                name={product.name}
-                description={product.description}
-                prices={product.prices}
-                brand={product.brand}
-                gallery={product.gallery}
+              <StyledProductLink
+                to={`/product/${product.id}`}
+                onClick={() => {
+                  this.handleSaveCurrentProduct(product);
+                }}
                 key={Math.round(Math.random() * 10000)}
-              />
+              >
+                <Product
+                  id={product.id}
+                  name={product.name}
+                  description={product.description}
+                  prices={product.prices}
+                  brand={product.brand}
+                  gallery={product.gallery}
+                />
+              </StyledProductLink>
             ))}
           </StyledProductList>
         </StyledHomeScreen>
@@ -86,18 +113,25 @@ class HomeScreen extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      saveCurrentProduct,
+    },
+    dispatch
+  );
+
 function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps)(
-  graphql(PRODUCTS_LIST_QUERY)(HomeScreen)
-);
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(graphql(PRODUCTS_LIST_QUERY)(HomeScreen));
 
 const StyledHomeScreen = styled.div`
-margin: 20vh 10vh;
- 
+  margin: 20vh 10vh;
 `;
 const StyledProductList = styled.section`
   display: flex;
@@ -107,12 +141,16 @@ const StyledProductList = styled.section`
   align-items: flex-start;
   align-content: flex-start;
   justify-content: flex-start;
-  
 `;
 const StyledHeading = styled.h1`
   font-size: 3rem;
   font-weight: 500;
   text-transform: uppercase;
   margin-left: 1rem;
-  
 `;
+
+const StyledProductLink = styled(Link)`
+  color: black;
+  text-decoration: none;
+`;
+

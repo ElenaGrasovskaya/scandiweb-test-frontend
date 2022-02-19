@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { changeCategory, categoryLoadList } from "../actions/categoryActions";
 import { gql } from "apollo-boost";
@@ -20,7 +21,6 @@ const StyledList = styled.ul`
 const StyledItem = styled.li`
   display: block;
   height: 7vh;
-
   position: relative;
   min-width: 5vw;
   border-bottom: 3px solid white;
@@ -31,11 +31,13 @@ const StyledItem = styled.li`
   }
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  text-decoration:none;
+  color: inherit;
 `;
 
 const CATEGORY_LIST_QUERY = gql`
@@ -65,7 +67,7 @@ class Category extends Component {
         <StyledList onLoad={() => this.handleCategoryLoadList(categoryList)}>
           {categoryList.map((category, index) => (
             <StyledItem key={index}>
-              <StyledLink onClick={() => this.handleChangeCategory(category)}>
+              <StyledLink to={"/"} onClick={() => this.handleChangeCategory(category)}>
                 {category}
               </StyledLink>
             </StyledItem>

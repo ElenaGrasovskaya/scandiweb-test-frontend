@@ -8,6 +8,8 @@ export const CATEGORY_CHANGE = "CATEGORY_CHANGE";
 export const CURRENCY_LIST = "CURRENCY_LIST";
 export const CURRENCY_CHANGE = "CURRENCY_CHANGE";
 
+export const CURRENT_PRODUCT_SAVE = "CURRENT_PRODUCT_SAVE";
+
 export const START_CATEGORY = "all";
 export const START_CURRENCY_SYMBOL = "$";
 export const START_CURRENCY_LABEL = "USD";
