@@ -7,38 +7,6 @@ import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import styled from "styled-components";
 
-const StyledList = styled.ul`
-  display: flex;
-  flex-direction: row;
-  list-style: none;
-  justify-content: space-evenly;
-  text-transform: uppercase;
-  font-size: 1.1em;
-  gap: 1rem;
-  margin: auto;
-`;
-
-const StyledItem = styled.li`
-  display: block;
-  height: 7vh;
-  position: relative;
-  min-width: 5vw;
-  border-bottom: 3px solid white;
-  transition: all 0.2s ease; 
-  &:hover {
-    color: green;
-    border-bottom: 3px solid green;
-  }
-`;
-
-const StyledLink = styled(Link)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-decoration:none;
-  color: inherit;
-`;
 
 const CATEGORY_LIST_QUERY = gql`
   query CATEGORY_LIST_QUERY {
@@ -95,3 +63,36 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(graphql(CATEGORY_LIST_QUERY)(Category));
+
+const StyledList = styled.ul`
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  justify-content: space-evenly;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  gap: 1rem;
+  margin: auto;
+`;
+
+const StyledItem = styled.li`
+  display: block;
+  height: 7vh;
+  position: relative;
+  min-width: 5vw;
+  border-bottom: 3px solid white;
+  transition: all 0.2s ease; 
+  &:hover {
+    color: green;
+    border-bottom: 3px solid green;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-decoration:none;
+  color: inherit;
+`;

@@ -55,6 +55,7 @@ class ProductScreen extends Component {
       return (
         <>
           <StyledContainer>
+            <StyledProductGallery>
             <StyledImagePicker>
               {product.gallery.map((image, index) => (
                 <a
@@ -68,9 +69,10 @@ class ProductScreen extends Component {
             <StyledImageView>
               <img src={this.state.currentImage || product.gallery[0]}></img>
             </StyledImageView>
+            </StyledProductGallery>
             <StyledProductDetails>
               <h1>{product.name}</h1>
-              <ProductAttribute attributes={product.attributes}></ProductAttribute>
+              <ProductAttribute attributes={product.attributes} productId={this.props.ID}></ProductAttribute>
             
               <div>{ReactHtmlParser(product.description)}</div>
 
@@ -131,5 +133,11 @@ min-width: 40vw;
 const StyledProductDetails = styled.div`
   display: flex;
   flex-direction:column;
-  min-width: 30vw;
+  width: 30vw;
+`;
+
+const StyledProductGallery = styled.div`
+min-width: 50vw;
+display: flex;
+flex-direction:row;
 `;
