@@ -5,26 +5,53 @@ import { bindActionCreators } from "redux";
 import { saveSelectedAttributes } from "../actions/currentProductActions";
 
 class ProductAttribute extends Component {
-
   constructor(props) {
     super(props);
-    this.state = {attributes:[]};
+    this.prepareState = () => {
+      let preState = [];
+      this.props.attributes.map((attribute) =>
+        preState.push({
+          attribute: attribute.name,
+          value: attribute.items[0].value,
+        })
+      );
+      //this.props.saveSelectedAttributes(this.props.productId, preState);
+      return preState;
+    };
+    this.state = {
+      attributes: [...this.prepareState()],
+      productId: this.props.productId,
+    };
   }
-  saveAttributes = (productId, attributeName, attributeValue) => {
-    let attributes = [];
+  handleSaveSelectedAttributes = (productId, attributes) => {
+    return this.props.saveSelectedAttributes(productId, attributes);
+  };
 
-    this.props.saveSelectedAttributes(productId, attributeName, attributeValue);
+  handleChange = (attribute, value) => {
+    const newState = this.state.attributes.map((pair) => {
+      if (pair.attribute === attribute) {
+        pair.value = value;
+      }
+      return pair;
+    });
+    console.log("New Attribute State", newState);
+    this.setState({
+      attributes: [...newState],
+      productId: this.props.productId,
+    });
+    this.handleSaveSelectedAttributes(this.state.productId, this.state.attributes);
   };
 
   render() {
     console.log("Attributes props", this.props);
+    console.log("Attributes state", this.state);
 
     return (
       <div>
         {this.props.attributes.map((attribute, index) => (
           <div key={index + 400}>
             <StyledAttributeName key={index + 300}>
-              {attribute.name}
+              {attribute.name}:
             </StyledAttributeName>
             <StyledSwatchContainer key={index + 500}>
               {attribute.items.map((item, index) => (
@@ -36,17 +63,13 @@ class ProductAttribute extends Component {
                     value={item.value}
                     background={item.value}
                     key={index + 100}
-                    checked={index===0}
-                    onClick={() => {
-                      this.saveAttributes(
-                        this.props.productId,
-                        attribute.name,
-                        item.value
-                      );
+                    defaultChecked={index === 0}
+                    onChange={() => {
+                      this.handleChange(attribute.id, item.value);
                     }}
                   ></StyledCustomCheckbox>
                   <label htmlFor={attribute.id + item.id} key={index + 200}>
-                    {item.displayValue}{" "}
+                    {item.displayValue}
                   </label>
                 </>
               ))}

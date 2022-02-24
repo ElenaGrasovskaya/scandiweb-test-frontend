@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import ProductAttribute from "../components/ProductAttribute";
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+import ReactHtmlParser, {
+  processNodes,
+  convertNodeToElement,
+  htmlparser2,
+} from "react-html-parser";
 
 const PRODUCT_DETAILS_QUERY = gql`
   query PRODUCT_DETAILS_QUERY($id: String!) {
@@ -56,27 +60,47 @@ class ProductScreen extends Component {
         <>
           <StyledContainer>
             <StyledProductGallery>
-            <StyledImagePicker>
-              {product.gallery.map((image, index) => (
-                <a
-                  key={index + 500}
-                  onClick={() => this.setState({ currentImage: image })}
-                >
-                  <img src={image} />
-                </a>
-              ))}
-            </StyledImagePicker>
-            <StyledImageView>
-              <img src={this.state.currentImage || product.gallery[0]}></img>
-            </StyledImageView>
+              <StyledImagePicker>
+                {product.gallery.map((image, index) => (
+                  <a
+                    key={index + 500}
+                    onClick={() => this.setState({ currentImage: image })}
+                  >
+                    <img src={image} />
+                  </a>
+                ))}
+              </StyledImagePicker>
+              <StyledImageView>
+                <img src={this.state.currentImage || product.gallery[0]}></img>
+              </StyledImageView>
             </StyledProductGallery>
             <StyledProductDetails>
               <h1>{product.name}</h1>
-              <ProductAttribute attributes={product.attributes} productId={this.props.ID}></ProductAttribute>
-            
-              <div>{ReactHtmlParser(product.description)}</div>
+              <ProductAttribute
+                attributes={product.attributes}
+                productId={this.props.ID}
+              ></ProductAttribute>
+              <StyledDescription>
+                Price:
+                {product.prices.map((price) => {
+                  if (
+                    price.currency.label ===
+                    this.props.currency.currentCurrency.label
+                  ) {
+                    return (
+                      <>
+                        {price.amount}
+                        {price.currency.symbol}
+                      </>
+                    );
+                  }
+                })}
+              </StyledDescription>
+              <StyledButton>add to cart</StyledButton>
 
-
+              <StyledDescription>
+                {ReactHtmlParser(product.description)}
+              </StyledDescription>
             </StyledProductDetails>
           </StyledContainer>
         </>
@@ -112,7 +136,7 @@ const StyledImagePicker = styled.div`
   min-width: 10vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+
   align-items: center;
   & img {
     object-fit: cover;
@@ -122,22 +146,50 @@ const StyledImagePicker = styled.div`
 `;
 
 const StyledImageView = styled.div`
-min-width: 40vw;
+  min-width: 40vw;
   & img {
-    
     width: 50rem;
-    height: 50rem;
+    height: auto;
+  }
+`;
+
+const StyledButton = styled.button`
+  min-width: 20vw;
+  background-color: green;
+  height: 5rem;
+  color: white;
+  font-size: 1.5em;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
+  &:hover {
+    background-color: lightgreen;
+  }
+  &:active {
+    background-color: lightgreen;
+    border: 1px solid grey;
   }
 `;
 
 const StyledProductDetails = styled.div`
   display: flex;
-  flex-direction:column;
-  width: 30vw;
+  flex-direction: column;
+  min-width: 20vw;
+  & p {
+    font-size: 1.5em;
+    font-weight: 500;
+  }
+  & h1 {
+    font-size: 2em;
+  }
 `;
 
 const StyledProductGallery = styled.div`
-min-width: 50vw;
-display: flex;
-flex-direction:row;
+  min-width: 50vw;
+  display: flex;
+  flex-direction: row;
+`;
+const StyledDescription = styled.p`
+  margin-top: 5rem;
+  font-size: 1.5rem;
 `;

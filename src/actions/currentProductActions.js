@@ -8,14 +8,11 @@ import {
     currentProduct: {...currentProduct}
   });
   
-  export const saveSelectedAttributes = (productId, attributeName, attributeValue) => ({
+  export const saveSelectedAttributes = (productId, attributes) => ({
     type: CURRENT_PRODUCT_ATTRIBUTES,
     selectedAttributes: {
       productId: productId, 
-      attibutes:   [{
-        attributeName: attributeName,
-        attributeValue: attributeValue
-      }]   
+      attibutes: [...attributes]  
     }, 
   });
   
