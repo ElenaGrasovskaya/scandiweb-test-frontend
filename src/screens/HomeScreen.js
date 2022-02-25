@@ -49,17 +49,19 @@ class HomeScreen extends Component {
     return this.props.saveCurrentProduct(product);
   };
 
+  componentDidMount() {
+    if (this.state.currentCategory !== this.props.category.currentCategory) {
+      this.setState({ currentCategory: this.props.category.currentCategory });
+    }
+  }
+
   componentDidUpdate() {
-   
     if (this.state.currentCategory !== this.props.category.currentCategory) {
       this.setState({ currentCategory: this.props.category.currentCategory });
     }
   }
 
   render() {
-    
-   
-
     localStorage.setItem(
       "currentCategory",
       this.props.category.currentCategory
@@ -74,7 +76,6 @@ class HomeScreen extends Component {
     );
 
     const { categories, error, loading } = this.props.data;
-    
 
     let productList = [];
     if (!loading && !error) {
@@ -90,20 +91,13 @@ class HomeScreen extends Component {
           <StyledProductList>
             {productList.map((product) => (
               <StyledProductLink
-                to={`/product/${product.id}`}
+                
                 onClick={() => {
                   this.handleSaveCurrentProduct(product);
                 }}
                 key={Math.round(Math.random() * 10000)}
               >
-                <Product
-                  id={product.id}
-                  name={product.name}
-                  description={product.description}
-                  prices={product.prices}
-                  brand={product.brand}
-                  gallery={product.gallery}
-                />
+                <Product diplayedProduct={product} />
               </StyledProductLink>
             ))}
           </StyledProductList>
@@ -149,8 +143,7 @@ const StyledHeading = styled.h1`
   margin-left: 1rem;
 `;
 
-const StyledProductLink = styled(Link)`
+const StyledProductLink = styled.div`
   color: black;
   text-decoration: none;
 `;
-

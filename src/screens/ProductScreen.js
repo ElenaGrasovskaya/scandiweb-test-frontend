@@ -9,6 +9,7 @@ import ReactHtmlParser, {
   convertNodeToElement,
   htmlparser2,
 } from "react-html-parser";
+import { addToCart } from "../actions/cartActions";
 
 const PRODUCT_DETAILS_QUERY = gql`
   query PRODUCT_DETAILS_QUERY($id: String!) {
@@ -46,6 +47,11 @@ class ProductScreen extends Component {
       currentImage: "",
     };
   }
+  handleAddToCart = (product, qty=1) => {
+    this.props.addToCart(product, qty) ;
+   
+  };
+
 
   render() {
     console.log("ProductScreen", this.props);

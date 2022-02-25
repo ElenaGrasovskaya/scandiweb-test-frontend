@@ -1,16 +1,11 @@
 import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "../constants/constants";
 import { getState } from "react";
 
-export const addToCart = (id, qty, product) => async (dispatch, getState) => {
-  
+export const addToCart = (product, qty) => async (dispatch, getState) => {
   dispatch({
     type: CART_ADD_ITEM,
-    payload: {
-      product: product.id,
-      name: product.name,
-      image: product.image,
-      price: product.price,
-      countInStock: product.countInStock,
+    product: {
+      ...product,
       qty,
     },
   });
@@ -25,4 +20,3 @@ export const removeFromCart = (id) => (dispatch, getState) => {
   });
   localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };
-
