@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { saveCurrentProduct } from "../actions/currentProductActions";
 import { bindActionCreators } from "redux";
+import { saveSelectedAttributes } from "../actions/currentProductActions";
 
 const PRODUCTS_LIST_QUERY = gql`
   query PRODUCTS_LIST_QUERY {
@@ -40,13 +41,31 @@ const PRODUCTS_LIST_QUERY = gql`
   }
 `;
 
+/*this.prepareState = () => {
+  let preState = [];
+  return this.props.attributes.map((attribute) =>
+
+      {{attribute: attribute.name,
+      value: attribute.items[0].value,}})
+
+*/
+
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { currentCategory: [] };
+    this.defaultAttributes = () => {
+      let preState = [];
+      return this.props.attributes.map((attribute) =>
+        preState.push({
+          attribute: attribute.name,
+          value: attribute.items[0].value,
+        })
+      );
+    };
   }
   handleSaveCurrentProduct = (product) => {
-    return this.props.saveCurrentProduct(product);
+    this.props.saveCurrentProduct(product);
   };
 
   componentDidMount() {
@@ -91,7 +110,6 @@ class HomeScreen extends Component {
           <StyledProductList>
             {productList.map((product) => (
               <StyledProductLink
-                
                 onClick={() => {
                   this.handleSaveCurrentProduct(product);
                 }}
@@ -111,6 +129,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       saveCurrentProduct,
+      saveSelectedAttributes,
     },
     dispatch
   );

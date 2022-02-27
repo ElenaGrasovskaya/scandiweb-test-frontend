@@ -17,8 +17,8 @@ export const currentProductReducer = (state = {}, action) => {
       return {
         ...state,
         selectedAttributes: {
-          productId: action.productId,
-          attributes: action.attributes,
+          productId: action.selectedAttributes.productId,
+          attributes:[...action.selectedAttributes.attibutes],
         },
       };
 

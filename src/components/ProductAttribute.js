@@ -15,16 +15,16 @@ class ProductAttribute extends Component {
           value: attribute.items[0].value,
         })
       );
-      //this.props.saveSelectedAttributes(this.props.productId, preState);
       return preState;
     };
     this.state = {
       attributes: [...this.prepareState()],
       productId: this.props.productId,
     };
+    this.props.saveSelectedAttributes(this.state.productId, this.state.attributes);
   }
   handleSaveSelectedAttributes = (productId, attributes) => {
-    return this.props.saveSelectedAttributes(productId, attributes);
+   return this.props.saveSelectedAttributes(productId, attributes);
   };
 
   handleChange = (attribute, value) => {

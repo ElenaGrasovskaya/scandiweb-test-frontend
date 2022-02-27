@@ -1,12 +1,13 @@
 import { CART_ADD_ITEM, CART_REMOVE_ITEM } from "../constants/constants";
 import { getState } from "react";
 
-export const addToCart = (product, qty) => async (dispatch, getState) => {
+export const addToCart = (product, qty, selectedAttributes) => (dispatch, getState) => {
   dispatch({
     type: CART_ADD_ITEM,
     product: {
       ...product,
       qty,
+      selectedAttributes,
     },
   });
 

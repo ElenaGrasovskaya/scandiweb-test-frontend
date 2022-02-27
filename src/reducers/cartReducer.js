@@ -6,13 +6,13 @@ import {
 } from "../constants/constants";
 
 export const cartReducer = (
-    state = { cartItems: []},
+    state = { cart: {cartItems: []}},
     action
   ) => {
     switch (action.type) {
       case CART_ADD_ITEM:
         const item = action.product;
-        const existItem = state.cartItems.find((x) => x.product === item.product);
+        const existItem = state.cartItems.find((x) => x.name === item.name);
         if (existItem) {
           return {
             ...state,

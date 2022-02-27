@@ -4,12 +4,13 @@ import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import ProductAttribute from "../components/ProductAttribute";
+import { addToCart } from "../actions/cartActions";
+import { bindActionCreators } from "redux";
 import ReactHtmlParser, {
   processNodes,
   convertNodeToElement,
   htmlparser2,
 } from "react-html-parser";
-import { addToCart } from "../actions/cartActions";
 
 const PRODUCT_DETAILS_QUERY = gql`
   query PRODUCT_DETAILS_QUERY($id: String!) {
@@ -45,13 +46,12 @@ class ProductScreen extends Component {
     super(props);
     this.state = {
       currentImage: "",
+      qty: 1,
     };
   }
-  handleAddToCart = (product, qty=1) => {
-    this.props.addToCart(product, qty) ;
-   
+  handleAddToCart = (product, qty, selectedAttributes) => {
+    this.props.addToCart(product, qty, selectedAttributes);
   };
-
 
   render() {
     console.log("ProductScreen", this.props);
@@ -86,7 +86,7 @@ class ProductScreen extends Component {
                 attributes={product.attributes}
                 productId={this.props.ID}
               ></ProductAttribute>
-              <StyledDescription>
+              <StyledPrice>
                 Price:
                 {product.prices.map((price) => {
                   if (
@@ -101,8 +101,33 @@ class ProductScreen extends Component {
                     );
                   }
                 })}
-              </StyledDescription>
-              <StyledButton>add to cart</StyledButton>
+              </StyledPrice>
+              <form>
+                <StyledQuantity htmlFor='qty'>
+                  Quantity:{" "}
+                  <input
+                    type='text'
+                    value='1'
+                    id='qty'
+                    onChange={(event) =>
+                      this.setState({ qty: event.target.value })
+                    }
+                  ></input>
+                </StyledQuantity>
+
+                <StyledButton
+                  onClick={(event) => {
+                    event.preventDefault();
+                    this.handleAddToCart(
+                      product,
+                      this.state.qty,
+                      this.props.product.selectedAttributes
+                    );
+                  }}
+                >
+                  add to cart
+                </StyledButton>
+              </form>
 
               <StyledDescription>
                 {ReactHtmlParser(product.description)}
@@ -119,7 +144,18 @@ function mapStateToProps(state) {
   return { ...state, ID: window.location.pathname.split("/")[2] };
 }
 
-export default connect(mapStateToProps)(
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      addToCart,
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   graphql(PRODUCT_DETAILS_QUERY, {
     options: (props) => ({
       variables: {
@@ -137,6 +173,14 @@ const StyledContainer = styled.section`
   width: 95vw;
   margin: 10rem auto 0 auto;
 `;
+
+const StyledPrice = styled.div`
+    font-size: 1.5em;
+    font-weight: 500;
+    margin: 2rem 0;
+
+`;
+
 
 const StyledImagePicker = styled.div`
   min-width: 10vw;
@@ -159,8 +203,21 @@ const StyledImageView = styled.div`
   }
 `;
 
+const StyledQuantity = styled.label`
+  font-size: 1.4em;
+  display: inline-block;
+
+  & input {
+    margin-bottom: 2rem;
+    width: 5rem;
+    height: 2rem;
+    font-size: 1em;
+  }
+`;
+
 const StyledButton = styled.button`
-  min-width: 20vw;
+  display: block;
+  min-width: 100%;
   background-color: green;
   height: 5rem;
   color: white;
@@ -182,8 +239,8 @@ const StyledProductDetails = styled.div`
   flex-direction: column;
   min-width: 20vw;
   & p {
-    font-size: 1.5em;
-    font-weight: 500;
+    font-size: 1.1em;
+    font-weight: 300;
   }
   & h1 {
     font-size: 2em;
