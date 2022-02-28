@@ -8,14 +8,29 @@ import { addToCart } from "../actions/cartActions";
 import { bindActionCreators } from "redux";
 
 class Product extends Component {
-  handleAddToCart = (product, qty=1) => {
-    this.props.addToCart(product, qty) ;
-   
+  constructor(props) {
+    super(props);
+    this.defaultAttributes = () => {
+      let defaultAttr = [];
+      this.props.diplayedProduct.attributes.map((attribute) =>
+        defaultAttr.push({
+          attribute: attribute.name,
+          value: attribute.items[0].value,
+        })
+      );
+      return {
+        productId: this.props.diplayedProduct.id,
+        attributes: defaultAttr,
+      };
+    };
+  }
+  handleAddToCart = (product, qty = 1, selectedAttributes) => {
+    this.props.addToCart(product, qty, selectedAttributes);
   };
 
   render() {
     const { id, name, prices, gallery } = this.props.diplayedProduct;
-    console.log("this.props.product", this.props.diplayedProduct);
+    console.log("this.props.diplayedProduct", this.props.diplayedProduct);
     localStorage.setItem(
       "currentCurrency",
       this.props.currency.currentCurrency
@@ -23,32 +38,37 @@ class Product extends Component {
 
     return (
       <StyledProduct>
-        <StyledCartIcon src={cart}
+        <StyledCartIcon
+          src={cart}
           onClick={() => {
-            this.handleAddToCart(this.props.diplayedProduct, 1);
+            this.handleAddToCart(
+              this.props.diplayedProduct,
+              1,
+              this.defaultAttributes()
+            );
           }}
         ></StyledCartIcon>
 
+        <StyledLink to={`/product/${id}`}>
+          <StyledProductImage
+            src={gallery[0]}
+            height='300px'
+          ></StyledProductImage>
 
-        <StyledLink to={`/product/${id}`}><StyledProductImage
-          src={gallery[0]}
-          height='300px'
-        ></StyledProductImage>
-
-        <StyledProductName>{name}</StyledProductName>
-        {prices.map((price) => {
-          if (
-            price.currency.label === this.props.currency.currentCurrency.label
-          )
-            return (
-              <p key={Math.round(Math.random() * 10000)}>
-                <strong>
-                  {price.currency.symbol}
-                  {price.amount}
-                </strong>
-              </p>
-            );
-        })}
+          <StyledProductName>{name}</StyledProductName>
+          {prices.map((price) => {
+            if (
+              price.currency.label === this.props.currency.currentCurrency.label
+            )
+              return (
+                <p key={Math.round(Math.random() * 10000)}>
+                  <strong>
+                    {price.currency.symbol}
+                    {price.amount}
+                  </strong>
+                </p>
+              );
+          })}
         </StyledLink>
       </StyledProduct>
     );
@@ -116,6 +136,6 @@ const StyledProductName = styled.h2`
 `;
 
 const StyledLink = styled(Link)`
-  text-decoration:none;
+  text-decoration: none;
   color: black;
 `;

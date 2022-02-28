@@ -81,7 +81,8 @@ class ProductScreen extends Component {
               </StyledImageView>
             </StyledProductGallery>
             <StyledProductDetails>
-              <h1>{product.name}</h1>
+              <h1>{product.brand}</h1>
+              <h2>{product.name}</h2>
               <ProductAttribute
                 attributes={product.attributes}
                 productId={this.props.ID}
@@ -255,4 +256,5 @@ const StyledProductGallery = styled.div`
 const StyledDescription = styled.p`
   margin-top: 5rem;
   font-size: 1.5rem;
+
 `;

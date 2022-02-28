@@ -41,14 +41,6 @@ const PRODUCTS_LIST_QUERY = gql`
   }
 `;
 
-/*this.prepareState = () => {
-  let preState = [];
-  return this.props.attributes.map((attribute) =>
-
-      {{attribute: attribute.name,
-      value: attribute.items[0].value,}})
-
-*/
 
 class HomeScreen extends Component {
   constructor(props) {

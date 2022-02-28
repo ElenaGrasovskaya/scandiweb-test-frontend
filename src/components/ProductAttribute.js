@@ -101,7 +101,7 @@ const StyledAttributeName = styled.h2`
 const StyledSwatchContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 1.5rem;
 `;
 
 const StyledCustomCheckbox = styled.input`
@@ -118,12 +118,12 @@ const StyledCustomCheckbox = styled.input`
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: black;
+    color: #333;
     border: solid black 2px;
-    width: 5rem;
-    height: 4rem;
+    width: 4rem;
+    height: 3rem;
     font-weight: 400;
-    font-size: 1.2em;
+    font-size: 1em;
 
     justify-content: space-evenly;
 
