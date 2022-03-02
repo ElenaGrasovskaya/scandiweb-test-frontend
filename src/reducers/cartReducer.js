@@ -3,6 +3,7 @@ import {
   CART_ADD_ITEM,
   CART_REMOVE_ITEM,
   CART_CLEAR_ITEMS,
+  CART_CHANGE_QTY,
 } from "../constants/constants";
 
 export const cartReducer = (
@@ -32,6 +33,13 @@ export const cartReducer = (
           ...state,
           cartItems: state.cartItems.filter((x) => x.name !== action.payload),
         };
+
+        case  CART_CHANGE_QTY:
+          const selectedProduct = state.cartItems.filter((x) => x.name === action.payload.itemName);
+          return {
+            ...state,
+            cartItems: [{...selectedProduct[0], qty :action.payload.newQty}, ...state.cartItems.filter((x) => x.name !== action.payload.itemName)],
+          };
   
      
       case CART_CLEAR_ITEMS:

@@ -2,26 +2,32 @@ import React, { Component } from "react";
 import ProductAttribute from "../components/ProductAttribute";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { removeFromCart } from "../actions/cartActions";
+import { removeFromCart, changeItemQTY } from "../actions/cartActions";
 import { bindActionCreators } from "redux";
 
 class CartScreen extends Component {
-
   constructor(props) {
     super(props);
-    this.state = [];
+    this.state = { currentItem: [{ itemName: "", itemQty: 1 }] };
   }
   handleRemoveFromCart = (productName) => {
     this.props.removeFromCart(productName);
   };
+
+  handleChangeQty = (productName, newQty) => {
+    this.props.changeItemQTY(productName, newQty);
+  };
+
   render() {
     console.log("CartScreen", this.props);
+    console.log("CartScreenState", this.state);
+
     return (
       <StyledContainer>
         <h1>Cart</h1>
         {this.props.cart.cartItems.map((item, index) => (
-          <StyledCartItem key={index+200}>
-            <StyledItemDescription>
+          <StyledCartItem key={index + 200}>
+            <StyledItemDescription key={index + 600}>
               <h2>
                 {item.brand}
                 <br /> {item.name}
@@ -42,14 +48,38 @@ class CartScreen extends Component {
                   }
                 })}
               </h3>
-              <ProductAttribute key={index+100}
+              <ProductAttribute
+                key={index + 100}
                 attributes={item.attributes}
                 productId={item.selectedAttributes.productId}
               ></ProductAttribute>
             </StyledItemDescription>
-            <StyledQuantity><button>+</button>{item.qty}<button>-</button></StyledQuantity>
-            <div><StyledItemPreview src={item.gallery[0]} /></div>
-            <StyledQuantity><button onClick={()=>this.handleRemoveFromCart(item.name)}>X</button></StyledQuantity>
+            <StyledQuantity key={index + 500}>
+              <button
+                onClick={() =>
+                  this.handleChangeQty(item.name, item.qty + 1)
+                }
+              >
+                +
+              </button>
+              {item.qty}
+
+              <button
+                onClick={() =>
+                  this.handleChangeQty(item.name, item.qty - 1)
+                }
+              >
+                -
+              </button>
+            </StyledQuantity>
+            <div>
+              <StyledItemPreview key={index + 300} src={item.gallery[0]} />
+            </div>
+            <StyledQuantity key={index + 400}>
+              <button onClick={() => this.handleRemoveFromCart(item.name)}>
+                X
+              </button>
+            </StyledQuantity>
           </StyledCartItem>
         ))}
       </StyledContainer>
@@ -65,6 +95,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       removeFromCart,
+      changeItemQTY,
     },
     dispatch
   );
@@ -87,24 +118,21 @@ const StyledCartItem = styled.div`
   margin: 2rem auto;
   display: flex;
   flex-direction: row;
-
 `;
 
 const StyledItemDescription = styled.div`
   color: black;
   width: 45rem;
- 
+
   display: flex;
   flex-direction: column;
   margin-right: 2rem;
-
 `;
 
 const StyledItemPreview = styled.img`
   width: 20rem;
   height: 20rem;
 `;
-
 
 const StyledQuantity = styled.div`
   color: black;
@@ -129,7 +157,4 @@ const StyledQuantity = styled.div`
       color: white;
     }
   }
-
 `;
-
-
