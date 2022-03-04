@@ -31,7 +31,6 @@ class Currency extends Component {
   render() {
     const { currencies, error, loading } = this.props.data;
 
-
     if (!error && !loading) {
       return (
         <StyledDropdownContainer>
@@ -83,13 +82,12 @@ export default connect(
 const StyledDropdownContainer = styled.div`
   position: relative;
   user-select: none;
-
 `;
 
 const StyledArrow = styled.span`
   display: block;
   position: absolute;
-  left: 2.2rem;
+  left: 1rem;
   top: 1.8rem;
   font-size: 0.8em;
   font-weight: 200;
@@ -116,6 +114,6 @@ const StyledDropdown = styled.ul`
   transition: opacity 0.2s ease;
   & li:hover {
     display: block;
-    color: green;
+    color: var(--green);
   }
 `;

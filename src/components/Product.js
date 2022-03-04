@@ -30,7 +30,6 @@ class Product extends Component {
 
   render() {
     const { id, name, prices, gallery } = this.props.diplayedProduct;
-    console.log("this.props.diplayedProduct", this.props.diplayedProduct);
     localStorage.setItem(
       "currentCurrency",
       this.props.currency.currentCurrency
@@ -99,7 +98,7 @@ const StyledCartIcon = styled.img`
   padding: 1rem;
   object-fit: contain;
   border-radius: 50%;
-  background-color: green;
+  background-color: var(--green);
   opacity: 0%;
   transition: opacity 0.2s ease-in;
 `;

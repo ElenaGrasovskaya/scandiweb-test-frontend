@@ -7,7 +7,6 @@ import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import styled from "styled-components";
 
-
 const CATEGORY_LIST_QUERY = gql`
   query CATEGORY_LIST_QUERY {
     categories {
@@ -35,7 +34,10 @@ class Category extends Component {
         <StyledList onLoad={() => this.handleCategoryLoadList(categoryList)}>
           {categoryList.map((category, index) => (
             <StyledItem key={index}>
-              <StyledLink to={"/"} onClick={() => this.handleChangeCategory(category)}>
+              <StyledLink
+                to={"/"}
+                onClick={() => this.handleChangeCategory(category)}
+              >
                 {category}
               </StyledLink>
             </StyledItem>
@@ -81,10 +83,10 @@ const StyledItem = styled.li`
   position: relative;
   min-width: 5vw;
   border-bottom: 3px solid white;
-  transition: all 0.2s ease; 
+  transition: all 0.2s ease;
   &:hover {
-    color: green;
-    border-bottom: 3px solid green;
+    color: var(--green);
+    border-bottom: 3px solid var(--green);
   }
 `;
 
@@ -93,6 +95,6 @@ const StyledLink = styled(Link)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-decoration:none;
+  text-decoration: none;
   color: inherit;
 `;

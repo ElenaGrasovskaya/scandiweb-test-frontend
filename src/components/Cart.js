@@ -8,7 +8,7 @@ class Cart extends Component {
   
   render() {
     const itemNum = this.props.cart.cartItems.length;
-    console.log("itemNum", itemNum);
+
     return (
       <StyledLink to={"/cart/"}>
         <StyledItemNum><span>{itemNum}</span></StyledItemNum>

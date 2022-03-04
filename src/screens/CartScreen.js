@@ -19,20 +19,19 @@ class CartScreen extends Component {
   };
 
   render() {
-    console.log("CartScreen", this.props);
-    console.log("CartScreenState", this.state);
+
 
     return (
-      <StyledContainer>
+      <StyledContainer> 
         <h1>Cart</h1>
         {this.props.cart.cartItems.map((item, index) => (
           <StyledCartItem key={index + 200}>
             <StyledItemDescription key={index + 600}>
-              <h2>
+              <h2 key={index + 700}>
                 {item.brand}
                 <br /> {item.name}
               </h2>
-              <h3>
+              <h3 key={index + 800}>
                 Price:{" "}
                 {item.prices.map((price) => {
                   if (
@@ -55,19 +54,15 @@ class CartScreen extends Component {
               ></ProductAttribute>
             </StyledItemDescription>
             <StyledQuantity key={index + 500}>
-              <button
-                onClick={() =>
-                  this.handleChangeQty(item.name, item.qty + 1)
-                }
+              <button key={index + 900}
+                onClick={() => this.handleChangeQty(item.name, item.qty + 1)}
               >
                 +
               </button>
               {item.qty}
 
               <button
-                onClick={() =>
-                  this.handleChangeQty(item.name, item.qty - 1)
-                }
+                onClick={() => this.handleChangeQty(item.name, item.qty - 1)}
               >
                 -
               </button>
@@ -130,8 +125,8 @@ const StyledItemDescription = styled.div`
 `;
 
 const StyledItemPreview = styled.img`
-  width: 20rem;
-  height: 20rem;
+  width: 15rem;
+  margin: 2rem;
 `;
 
 const StyledQuantity = styled.div`

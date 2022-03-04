@@ -54,14 +54,9 @@ class ProductScreen extends Component {
   };
 
   render() {
-    console.log("ProductScreen", this.props);
-    console.log("ProductScreen State", this.state);
-
     const { loading, error } = this.props.data;
     if (!loading && !error) {
       const { product } = this.props.data;
-
-      console.log("product", product);
       return (
         <>
           <StyledContainer>
@@ -72,7 +67,7 @@ class ProductScreen extends Component {
                     key={index + 500}
                     onClick={() => this.setState({ currentImage: image })}
                   >
-                    <img src={image} />
+                    <img src={image} key={index + 600} />
                   </a>
                 ))}
               </StyledImagePicker>
@@ -107,9 +102,11 @@ class ProductScreen extends Component {
                 <StyledQuantity htmlFor='qty'>
                   Quantity:{" "}
                   <input
-                    type='text'
-                    value='1'
+                    type='number'
+                    value={this.state.qty}
                     id='qty'
+                    min='1'
+                    max='100'
                     onChange={(event) =>
                       this.setState({ qty: event.target.value })
                     }
@@ -176,12 +173,10 @@ const StyledContainer = styled.section`
 `;
 
 const StyledPrice = styled.div`
-    font-size: 1.5em;
-    font-weight: 500;
-    margin: 2rem 0;
-
+  font-size: 1.5em;
+  font-weight: 500;
+  margin: 2rem 0;
 `;
-
 
 const StyledImagePicker = styled.div`
   min-width: 10vw;
@@ -199,7 +194,7 @@ const StyledImagePicker = styled.div`
 const StyledImageView = styled.div`
   min-width: 40vw;
   & img {
-    width: 50rem;
+    width: 40rem;
     height: auto;
   }
 `;
@@ -213,13 +208,20 @@ const StyledQuantity = styled.label`
     width: 5rem;
     height: 2rem;
     font-size: 1em;
+    border-radius: none;
+    border: 1px solid black;
+    &:active,
+    :focus {
+      border-radius: none;
+      border-color: var(--green);
+    }
   }
 `;
 
 const StyledButton = styled.button`
   display: block;
   min-width: 100%;
-  background-color: green;
+  background-color: var(--green);
   height: 5rem;
   color: white;
   font-size: 1.5em;
@@ -227,10 +229,10 @@ const StyledButton = styled.button`
   text-transform: uppercase;
   border: none;
   &:hover {
-    background-color: lightgreen;
+    background-color: var(--lightgreen);
   }
   &:active {
-    background-color: lightgreen;
+    background-color: var(--lightgreen);
     border: 1px solid grey;
   }
 `;
@@ -238,7 +240,8 @@ const StyledButton = styled.button`
 const StyledProductDetails = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 20vw;
+  width: 30rem;
+
   & p {
     font-size: 1.1em;
     font-weight: 300;
@@ -256,5 +259,4 @@ const StyledProductGallery = styled.div`
 const StyledDescription = styled.p`
   margin-top: 5rem;
   font-size: 1.5rem;
-
 `;

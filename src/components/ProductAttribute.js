@@ -21,10 +21,13 @@ class ProductAttribute extends Component {
       attributes: [...this.prepareState()],
       productId: this.props.productId,
     };
-    this.props.saveSelectedAttributes(this.state.productId, this.state.attributes);
+    this.props.saveSelectedAttributes(
+      this.state.productId,
+      this.state.attributes
+    );
   }
   handleSaveSelectedAttributes = (productId, attributes) => {
-   return this.props.saveSelectedAttributes(productId, attributes);
+    return this.props.saveSelectedAttributes(productId, attributes);
   };
 
   handleChange = (attribute, value) => {
@@ -34,18 +37,18 @@ class ProductAttribute extends Component {
       }
       return pair;
     });
-    console.log("New Attribute State", newState);
+
     this.setState({
       attributes: [...newState],
       productId: this.props.productId,
     });
-    this.handleSaveSelectedAttributes(this.state.productId, this.state.attributes);
+    this.handleSaveSelectedAttributes(
+      this.state.productId,
+      this.state.attributes
+    );
   };
 
   render() {
-    console.log("Attributes props", this.props);
-    console.log("Attributes state", this.state);
-
     return (
       <div>
         {this.props.attributes.map((attribute, index) => (
@@ -58,7 +61,7 @@ class ProductAttribute extends Component {
                 <>
                   <StyledCustomCheckbox
                     type='radio'
-                    id={attribute.id + item.id}
+                    id={attribute.id + item.id + this.state.productId}
                     name={attribute.name}
                     value={item.value}
                     background={item.value}
@@ -68,7 +71,10 @@ class ProductAttribute extends Component {
                       this.handleChange(attribute.id, item.value);
                     }}
                   ></StyledCustomCheckbox>
-                  <label htmlFor={attribute.id + item.id} key={index + 200}>
+                  <label
+                    htmlFor={attribute.id + item.id + this.state.productId}
+                    key={index + 200}
+                  >
                     {item.displayValue}
                   </label>
                 </>
@@ -98,7 +104,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(ProductAttribute);
 const StyledAttributeName = styled.h2`
   font-family: "Roboto", sans-serif;
 `;
-const StyledSwatchContainer = styled.div`
+const StyledSwatchContainer = styled.form`
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
@@ -123,7 +129,7 @@ const StyledCustomCheckbox = styled.input`
     width: 4rem;
     height: 3rem;
     font-weight: 400;
-    font-size: 1em;
+    font-size: 0.9em;
 
     justify-content: space-evenly;
 
