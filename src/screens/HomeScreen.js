@@ -46,16 +46,7 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { currentCategory: [] };
-    this.defaultAttributes = () => {
-      let preState = [];
-      return this.props.attributes.map((attribute) =>
-        preState.push({
-          attribute: attribute.name,
-          value: attribute.items[0].value,
-        })
-      );
-    };
-  }
+     }
   handleSaveCurrentProduct = (product) => {
     this.props.saveCurrentProduct(product);
   };
@@ -100,14 +91,14 @@ class HomeScreen extends Component {
         <StyledHomeScreen>
           <StyledHeading>{this.state.currentCategory}</StyledHeading>
           <StyledProductList>
-            {productList.map((product) => (
+            {productList.map((product, index) => (
               <StyledProductLink
                 onClick={() => {
                   this.handleSaveCurrentProduct(product);
                 }}
-                key={Math.round(Math.random() * 10000)}
+                key={index+100}
               >
-                <Product diplayedProduct={product} />
+                <Product displayedProduct={product} />
               </StyledProductLink>
             ))}
           </StyledProductList>

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import cart from "../assets/cart.png";
 import { addToCart } from "../actions/cartActions";
+import { saveSelectedAttributes } from "../actions/currentProductActions";
 import { bindActionCreators } from "redux";
 
 class Product extends Component {
@@ -12,24 +13,26 @@ class Product extends Component {
     super(props);
     this.defaultAttributes = () => {
       let defaultAttr = [];
-      this.props.diplayedProduct.attributes.map((attribute) =>
+      this.props.displayedProduct.attributes.map((attribute) =>
         defaultAttr.push({
           attribute: attribute.name,
-          value: attribute.items[0].value,
+          value: attribute.items[0].displayValue,
         })
       );
+      alert(this.props.displayedProduct.id);
       return {
-        productId: this.props.diplayedProduct.id,
-        attributes: defaultAttr,
+        attributes: [...defaultAttr],
+        productId: this.props.displayedProduct.id,
       };
     };
   }
-  handleAddToCart = (product, qty = 1, selectedAttributes) => {
-    this.props.addToCart(product, qty, selectedAttributes);
+  handleAddToCart = (product, qty) => {
+    this.props.addToCart(product, qty);
   };
 
   render() {
-    const { id, name, prices, gallery } = this.props.diplayedProduct;
+    console.log("Product props", this.props);
+    const { id, name, prices, gallery } = this.props.displayedProduct;
     localStorage.setItem(
       "currentCurrency",
       this.props.currency.currentCurrency
@@ -40,11 +43,7 @@ class Product extends Component {
         <StyledCartIcon
           src={cart}
           onClick={() => {
-            this.handleAddToCart(
-              this.props.diplayedProduct,
-              1,
-              this.defaultAttributes()
-            );
+            this.handleAddToCart(this.props.displayedProduct, 1);
           }}
         ></StyledCartIcon>
 
@@ -55,12 +54,12 @@ class Product extends Component {
           ></StyledProductImage>
 
           <StyledProductName>{name}</StyledProductName>
-          {prices.map((price) => {
+          {prices.map((price, index) => {
             if (
               price.currency.label === this.props.currency.currentCurrency.label
             )
               return (
-                <p key={Math.round(Math.random() * 10000)}>
+                <p key={Math.round(index+50)}>
                   <strong>
                     {price.currency.symbol}
                     {price.amount}
@@ -81,6 +80,7 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       addToCart,
+      saveSelectedAttributes,
     },
     dispatch
   );

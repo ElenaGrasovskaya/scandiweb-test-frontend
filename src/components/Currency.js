@@ -98,6 +98,7 @@ const StyledArrow = styled.span`
 
 const StyledDropdown = styled.ul`
   position: absolute;
+  z-index: 2000;
   left: 1.2rem;
   top: 3rem;
   margin: 0;

@@ -27,7 +27,7 @@ class ProductAttribute extends Component {
     );
   }
   handleSaveSelectedAttributes = (productId, attributes) => {
-    return this.props.saveSelectedAttributes(productId, attributes);
+    this.props.saveSelectedAttributes(productId, attributes);
   };
 
   handleChange = (attribute, value) => {
@@ -37,6 +37,7 @@ class ProductAttribute extends Component {
       }
       return pair;
     });
+    console.log("newState", newState);
 
     this.setState({
       attributes: [...newState],
@@ -47,32 +48,56 @@ class ProductAttribute extends Component {
       this.state.attributes
     );
   };
+  checkSelectedAttribute = (productId, attributeName, value) => {
+    let checked = false;
+    this.props.product.selectedAttributes.forEach((pair) => {
+      if (pair.productId === productId) {
+        pair.attributes.forEach((attribute) => {
+          if (
+            attribute.attribute === attributeName &&
+            attribute.value === value
+          ) {
+            checked = true;
+          } else checked = false;
+        });
+      }
+    });
+    return checked;
+  };
 
   render() {
+    console.log("AttR Props", this.props);
+    console.log("AttR State", this.state);
     return (
       <div>
         {this.props.attributes.map((attribute, index) => (
           <div key={index + 400}>
-            <StyledAttributeName key={index + 300}>
+            <StyledAttributeName scale={this.props.scale} key={index + 300}>
               {attribute.name}:
             </StyledAttributeName>
-            <StyledSwatchContainer key={index + 500}>
+            <StyledSwatchContainer scale={this.props.scale} key={index + 500}>
               {attribute.items.map((item, index) => (
                 <>
                   <StyledCustomCheckbox
                     type='radio'
-                    id={attribute.id + item.id + this.state.productId}
-                    name={attribute.name}
-                    value={item.value}
-                    background={item.value}
+                    id={this.state.productId+attribute.name}
+                    name={this.state.productId+attribute.name}
+                    value={item.displayValue}
+                    background={item.displayValue}
                     key={index + 100}
-                    defaultChecked={index === 0}
+                    scale={this.props.scale}
+                    checked={this.checkSelectedAttribute(
+                      this.state.productId,
+                      attribute.name,
+                      item.displayValue
+                    )}
                     onChange={() => {
                       this.handleChange(attribute.id, item.value);
+                      
                     }}
                   ></StyledCustomCheckbox>
                   <label
-                    htmlFor={attribute.id + item.id + this.state.productId}
+                    htmlFor={this.state.productId+attribute.name}
                     key={index + 200}
                   >
                     {item.displayValue}
@@ -103,11 +128,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(ProductAttribute);
 
 const StyledAttributeName = styled.h2`
   font-family: "Roboto", sans-serif;
+
+  font-size: ${(props) => props.scale}em;
 `;
 const StyledSwatchContainer = styled.form`
   display: flex;
   flex-direction: row;
-  gap: 1.5rem;
+  gap: calc(${(props) => props.scale}*1.5rem);
 `;
 
 const StyledCustomCheckbox = styled.input`
@@ -120,16 +147,17 @@ const StyledCustomCheckbox = styled.input`
     align-items: center;
     user-select: none;
     background-color: ${(props) => props.background};
+
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #333;
     border: solid black 2px;
-    width: 4rem;
-    height: 3rem;
+    width: calc(${(props) => props.scale}*4rem);
+    height: calc(${(props) => props.scale}*3rem);
     font-weight: 400;
-    font-size: 0.9em;
+    font-size: calc(${(props) => props.scale}*1em);
 
     justify-content: space-evenly;
 

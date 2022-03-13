@@ -6,8 +6,7 @@ export const addToCart = (product, qty, selectedAttributes) => (dispatch, getSta
     type: CART_ADD_ITEM,
     product: {
       ...product,
-      qty,
-      selectedAttributes,
+      qty
     },
   });
 

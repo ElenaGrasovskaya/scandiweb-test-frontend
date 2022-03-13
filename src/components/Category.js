@@ -22,6 +22,11 @@ class Category extends Component {
     return this.props.categoryLoadList(categoryList);
   };
 
+  constructor(props) {
+    super(props);
+    this.state = { clicked: false };
+  }
+
   render() {
     const { categories, error, loading } = this.props.data;
     let categoryList = [];

@@ -6,10 +6,6 @@ import { removeFromCart, changeItemQTY } from "../actions/cartActions";
 import { bindActionCreators } from "redux";
 
 class CartScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { currentItem: [{ itemName: "", itemQty: 1 }] };
-  }
   handleRemoveFromCart = (productName) => {
     this.props.removeFromCart(productName);
   };
@@ -19,10 +15,8 @@ class CartScreen extends Component {
   };
 
   render() {
-
-
     return (
-      <StyledContainer> 
+      <StyledContainer>
         <h1>Cart</h1>
         {this.props.cart.cartItems.map((item, index) => (
           <StyledCartItem key={index + 200}>
@@ -48,33 +42,42 @@ class CartScreen extends Component {
                 })}
               </h3>
               <ProductAttribute
+                scale = {1}
                 key={index + 100}
                 attributes={item.attributes}
-                productId={item.selectedAttributes.productId}
+                productId={item.id}
               ></ProductAttribute>
             </StyledItemDescription>
-            <StyledQuantity key={index + 500}>
-              <button key={index + 900}
-                onClick={() => this.handleChangeQty(item.name, item.qty + 1)}
-              >
-                +
-              </button>
-              {item.qty}
+            <StyledPreviewBlock>
+              <StyledQuantity key={index + 500}>
+                <button
+                  key={index + 900}
+                  onClick={() => this.handleChangeQty(item.name, item.qty + 1)}
+                >
+                  +
+                </button>
+                {item.qty < 1 ? 1 : item.qty}
 
-              <button
-                onClick={() => this.handleChangeQty(item.name, item.qty - 1)}
-              >
-                -
-              </button>
-            </StyledQuantity>
-            <div>
-              <StyledItemPreview key={index + 300} src={item.gallery[0]} />
-            </div>
-            <StyledQuantity key={index + 400}>
-              <button onClick={() => this.handleRemoveFromCart(item.name)}>
-                X
-              </button>
-            </StyledQuantity>
+                <button
+                  onClick={() =>
+                    this.handleChangeQty(
+                      item.name,
+                      item.qty - 1 < 1 ? 1 : item.qty - 1
+                    )
+                  }
+                >
+                  -
+                </button>
+              </StyledQuantity>
+              <div>
+                <StyledItemPreview key={index + 300} src={item.gallery[0]} />
+              </div>
+              <StyledQuantity key={index + 400}>
+                <button onClick={() => this.handleRemoveFromCart(item.name)}>
+                  X
+                </button>
+              </StyledQuantity>
+            </StyledPreviewBlock>
           </StyledCartItem>
         ))}
       </StyledContainer>
@@ -113,6 +116,12 @@ const StyledCartItem = styled.div`
   margin: 2rem auto;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+`;
+const StyledPreviewBlock = styled.div`
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 `;
 
 const StyledItemDescription = styled.div`

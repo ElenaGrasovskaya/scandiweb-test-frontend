@@ -49,14 +49,15 @@ class ProductScreen extends Component {
       qty: 1,
     };
   }
-  handleAddToCart = (product, qty, selectedAttributes) => {
-    this.props.addToCart(product, qty, selectedAttributes);
+  handleAddToCart = (product, qty ) => {
+    this.props.addToCart(product, qty );
   };
 
   render() {
     const { loading, error } = this.props.data;
     if (!loading && !error) {
-      const { product } = this.props.data;
+      const product  = {...this.props.data.product, id: this.props.ID};
+      console.log("product", product)
       return (
         <>
           <StyledContainer>
@@ -79,8 +80,9 @@ class ProductScreen extends Component {
               <h1>{product.brand}</h1>
               <h2>{product.name}</h2>
               <ProductAttribute
+                scale={1}
                 attributes={product.attributes}
-                productId={this.props.ID}
+                productId={product.id}
               ></ProductAttribute>
               <StyledPrice>
                 Price:
@@ -119,7 +121,7 @@ class ProductScreen extends Component {
                     this.handleAddToCart(
                       product,
                       this.state.qty,
-                      this.props.product.selectedAttributes
+                    
                     );
                   }}
                 >
