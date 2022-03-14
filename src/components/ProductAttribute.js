@@ -9,12 +9,25 @@ class ProductAttribute extends Component {
     super(props);
     this.prepareState = () => {
       let preState = [];
-      this.props.attributes.map((attribute) =>
-        preState.push({
-          attribute: attribute.name,
-          value: attribute.items[0].value,
-        })
-      );
+
+      this.props.product.selectedAttributes.forEach((item) => {
+        if (item.productId === this.props.productId) {
+          
+          preState = [...item.attributes];
+          console.log("there is an item", preState);
+        }
+      });
+
+      if (preState) {
+        this.props.attributes.map((attribute) => {
+          preState.push({
+            attribute: attribute.name,
+            value: attribute.items[0].value,
+          });
+        });
+        console.log("new item", preState);
+      }
+
       return preState;
     };
     this.state = {
@@ -37,7 +50,6 @@ class ProductAttribute extends Component {
       }
       return pair;
     });
-    console.log("newState", newState);
 
     this.setState({
       attributes: [...newState],
@@ -49,7 +61,7 @@ class ProductAttribute extends Component {
     );
   };
   checkSelectedAttribute = (productId, attributeName, value) => {
-    let checked = false;
+    let checked;
     this.props.product.selectedAttributes.forEach((pair) => {
       if (pair.productId === productId) {
         pair.attributes.forEach((attribute) => {
@@ -57,19 +69,22 @@ class ProductAttribute extends Component {
             attribute.attribute === attributeName &&
             attribute.value === value
           ) {
+            
             checked = true;
-          } else checked = false;
+            console.log(checked);
+            return;
+          }
         });
       }
+      if (checked) return;
     });
+
     return checked;
   };
 
   render() {
-    console.log("AttR Props", this.props);
-    console.log("AttR State", this.state);
     return (
-      <div>
+      <div key={Math.random() * 1000}>
         {this.props.attributes.map((attribute, index) => (
           <div key={index + 400}>
             <StyledAttributeName scale={this.props.scale} key={index + 300}>
@@ -80,24 +95,28 @@ class ProductAttribute extends Component {
                 <>
                   <StyledCustomCheckbox
                     type='radio'
-                    id={this.state.productId+attribute.name}
-                    name={this.state.productId+attribute.name}
+                    id={
+                      this.state.productId + attribute.name + item.displayValue
+                    }
+                    name={this.state.productId + attribute.name}
                     value={item.displayValue}
-                    background={item.displayValue}
-                    key={index + 100}
+                    background={item.value}
+                    key={Math.random() * 2000}
                     scale={this.props.scale}
-                    checked={this.checkSelectedAttribute(
+                    checked={() =>this.checkSelectedAttribute(
                       this.state.productId,
                       attribute.name,
                       item.displayValue
                     )}
+
                     onChange={() => {
-                      this.handleChange(attribute.id, item.value);
-                      
+                      this.handleChange(attribute.name, item.displayValue);
                     }}
                   ></StyledCustomCheckbox>
                   <label
-                    htmlFor={this.state.productId+attribute.name}
+                    htmlFor={
+                      this.state.productId + attribute.name + item.displayValue
+                    }
                     key={index + 200}
                   >
                     {item.displayValue}
@@ -164,7 +183,7 @@ const StyledCustomCheckbox = styled.input`
     text-transform: uppercase;
   }
   &:checked + label {
-    background-color: black;
+    background-color: black !important;
     color: white;
   }
 `;

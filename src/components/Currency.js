@@ -87,7 +87,7 @@ const StyledDropdownContainer = styled.div`
 const StyledArrow = styled.span`
   display: block;
   position: absolute;
-  left: 1rem;
+  left: 2rem;
   top: 1.8rem;
   font-size: 0.8em;
   font-weight: 200;

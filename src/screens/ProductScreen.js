@@ -49,15 +49,15 @@ class ProductScreen extends Component {
       qty: 1,
     };
   }
-  handleAddToCart = (product, qty ) => {
-    this.props.addToCart(product, qty );
+  handleAddToCart = (product, qty) => {
+    this.props.addToCart(product, qty);
   };
 
   render() {
     const { loading, error } = this.props.data;
     if (!loading && !error) {
-      const product  = {...this.props.data.product, id: this.props.ID};
-      console.log("product", product)
+      const product = { ...this.props.data.product, id: this.props.ID };
+
       return (
         <>
           <StyledContainer>
@@ -116,13 +116,11 @@ class ProductScreen extends Component {
                 </StyledQuantity>
 
                 <StyledButton
+                  inStock={product.inStock}
                   onClick={(event) => {
                     event.preventDefault();
-                    this.handleAddToCart(
-                      product,
-                      this.state.qty,
-                    
-                    );
+                    product.inStock &&
+                      this.handleAddToCart(product, this.state.qty);
                   }}
                 >
                   add to cart
@@ -223,7 +221,8 @@ const StyledQuantity = styled.label`
 const StyledButton = styled.button`
   display: block;
   min-width: 100%;
-  background-color: var(--green);
+  background-color: ${(props) =>
+    props.inStock ? "var(--green)" : "lightgrey"};
   height: 5rem;
   color: white;
   font-size: 1.5em;
@@ -231,7 +230,8 @@ const StyledButton = styled.button`
   text-transform: uppercase;
   border: none;
   &:hover {
-    background-color: var(--lightgreen);
+    background-color: ${(props) =>
+      props.inStock ? "var(--lightgreen)" : "lightgrey"};
   }
   &:active {
     background-color: var(--lightgreen);
@@ -258,7 +258,7 @@ const StyledProductGallery = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const StyledDescription = styled.p`
+const StyledDescription = styled.div`
   margin-top: 5rem;
   font-size: 1.5rem;
 `;

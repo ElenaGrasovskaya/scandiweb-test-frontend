@@ -172,6 +172,7 @@ const StyledBackground = styled.div`
 `;
 
 const CartPopup = styled.div`
+  user-select: none;
   top: 7vh;
 
   position: absolute;
@@ -187,6 +188,7 @@ const CartPopup = styled.div`
 `;
 
 const StyledLink = styled.a`
+  user-select: none;
   text-decoration: none;
   color: black;
   position: relative;
@@ -208,6 +210,7 @@ const StyledItemNum = styled.div`
   border-radius: 50%;
   background-color: black;
   color: white;
+  user-select: none;
   & span {
     position: absolute;
     top: 50%;

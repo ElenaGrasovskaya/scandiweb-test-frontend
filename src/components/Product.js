@@ -31,8 +31,7 @@ class Product extends Component {
   };
 
   render() {
-    console.log("Product props", this.props);
-    const { id, name, prices, gallery } = this.props.displayedProduct;
+    const { id, name, prices, gallery, inStock } = this.props.displayedProduct;
     localStorage.setItem(
       "currentCurrency",
       this.props.currency.currentCurrency
@@ -41,9 +40,10 @@ class Product extends Component {
     return (
       <StyledProduct>
         <StyledCartIcon
+          inStock={inStock}
           src={cart}
           onClick={() => {
-            this.handleAddToCart(this.props.displayedProduct, 1);
+            inStock&&this.handleAddToCart(this.props.displayedProduct, 1);
           }}
         ></StyledCartIcon>
 
@@ -98,7 +98,7 @@ const StyledCartIcon = styled.img`
   padding: 1rem;
   object-fit: contain;
   border-radius: 50%;
-  background-color: var(--green);
+  background-color:  ${(props) => props.inStock?"var(--green)":"lightgrey"};
   opacity: 0%;
   transition: opacity 0.2s ease-in;
 `;

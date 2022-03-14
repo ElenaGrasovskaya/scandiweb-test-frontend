@@ -116,6 +116,7 @@ const StyledCartItem = styled.div`
   margin: 2rem auto;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   flex-wrap: wrap;
 `;
 const StyledPreviewBlock = styled.div`
