@@ -19,13 +19,13 @@ class CartScreen extends Component {
       <StyledContainer>
         <h1>Cart</h1>
         {this.props.cart.cartItems.map((item, index) => (
-          <StyledCartItem key={index + 200}>
-            <StyledItemDescription key={index + 600}>
-              <h2 key={index + 700}>
+          <StyledCartItem key={index + 180}>
+            <StyledItemDescription key={index + 190}>
+              <h2 key={index + 200}>
                 {item.brand}
                 <br /> {item.name}
               </h2>
-              <h3 key={index + 800}>
+              <h3 key={index + 210}>
                 Price:{" "}
                 {item.prices.map((price) => {
                   if (
@@ -43,15 +43,15 @@ class CartScreen extends Component {
               </h3>
               <ProductAttribute
                 scale = {1}
-                key={index + 100}
+                key={index + 220}
                 attributes={item.attributes}
                 productId={item.id}
               ></ProductAttribute>
             </StyledItemDescription>
             <StyledPreviewBlock>
-              <StyledQuantity key={index + 500}>
+              <StyledQuantity key={index + 230}>
                 <button
-                  key={index + 900}
+                  key={index + 240}
                   onClick={() => this.handleChangeQty(item.name, item.qty + 1)}
                 >
                   +
@@ -70,9 +70,9 @@ class CartScreen extends Component {
                 </button>
               </StyledQuantity>
               <div>
-                <StyledItemPreview key={index + 300} src={item.gallery[0]} />
+                <StyledItemPreview key={index + 250} src={item.gallery[0]} />
               </div>
-              <StyledQuantity key={index + 400}>
+              <StyledQuantity key={index + 260}>
                 <button onClick={() => this.handleRemoveFromCart(item.name)}>
                   X
                 </button>

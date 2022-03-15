@@ -96,7 +96,7 @@ class HomeScreen extends Component {
                 onClick={() => {
                   this.handleSaveCurrentProduct(product);
                 }}
-                key={index+100}
+                key={index+270}
               >
                 <Product displayedProduct={product} />
               </StyledProductLink>

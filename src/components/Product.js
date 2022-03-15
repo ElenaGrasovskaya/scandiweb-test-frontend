@@ -59,7 +59,7 @@ class Product extends Component {
               price.currency.label === this.props.currency.currentCurrency.label
             )
               return (
-                <p key={Math.round(index+50)}>
+                <p key={index+120}>
                   <strong>
                     {price.currency.symbol}
                     {price.amount}

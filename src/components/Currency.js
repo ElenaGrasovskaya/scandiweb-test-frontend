@@ -47,7 +47,7 @@ class Currency extends Component {
                 onClick={() =>
                   this.handleChangeCurrency(currency.label, currency.symbol)
                 }
-                key={Math.round(Math.random() * 10000)}
+                key={index+110}
               >
                 {currency.symbol}&nbsp;{currency.label}
               </li>

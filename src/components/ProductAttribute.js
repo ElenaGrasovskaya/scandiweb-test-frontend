@@ -7,22 +7,22 @@ import { saveSelectedAttributes } from "../actions/currentProductActions";
 class ProductAttribute extends Component {
   constructor(props) {
     super(props);
-    this.prepareState = () => {
+    this.RandomIndex = Math.random()*10000;
+    this.prepareState = () => {                             //if store contains  selected attributes, they are loaded to preState
+                                                            // if not, default values are assigned as attributes
       let preState = [];
 
       this.props.product.selectedAttributes.forEach((item) => {
         if (item.productId === this.props.productId) {
-          
           preState = [...item.attributes];
-          console.log("there is an item", preState);
         }
       });
 
-      if (preState) {
+      if (preState.length<2) {
         this.props.attributes.map((attribute) => {
           preState.push({
             attribute: attribute.name,
-            value: attribute.items[0].value,
+            value: attribute.items[0].displayValue,
           });
         });
         console.log("new item", preState);
@@ -34,7 +34,7 @@ class ProductAttribute extends Component {
       attributes: [...this.prepareState()],
       productId: this.props.productId,
     };
-    this.props.saveSelectedAttributes(
+    this.props.saveSelectedAttributes(                //either default or modified values are sent to the store
       this.state.productId,
       this.state.attributes
     );
@@ -60,8 +60,9 @@ class ProductAttribute extends Component {
       this.state.attributes
     );
   };
-  checkSelectedAttribute = (productId, attributeName, value) => {
-    let checked;
+  checkSelectedAttribute = (productId, attributeName, value) => {          //this check defines which options
+                                                                           //are highlighted in radio button sets  
+    let checked;   
     this.props.product.selectedAttributes.forEach((pair) => {
       if (pair.productId === productId) {
         pair.attributes.forEach((attribute) => {
@@ -69,7 +70,6 @@ class ProductAttribute extends Component {
             attribute.attribute === attributeName &&
             attribute.value === value
           ) {
-            
             checked = true;
             console.log(checked);
             return;
@@ -84,13 +84,13 @@ class ProductAttribute extends Component {
 
   render() {
     return (
-      <div key={Math.random() * 1000}>
+      <div>
         {this.props.attributes.map((attribute, index) => (
-          <div key={index + 400}>
-            <StyledAttributeName scale={this.props.scale} key={index + 300}>
+          <div key={index + 130 + this.RandomIndex}>
+            <StyledAttributeName scale={this.props.scale} key={index + 140 + this.RandomIndex}>
               {attribute.name}:
             </StyledAttributeName>
-            <StyledSwatchContainer scale={this.props.scale} key={index + 500}>
+            <StyledSwatchContainer scale={this.props.scale} key={index + 150 + this.RandomIndex}>
               {attribute.items.map((item, index) => (
                 <>
                   <StyledCustomCheckbox
@@ -101,14 +101,13 @@ class ProductAttribute extends Component {
                     name={this.state.productId + attribute.name}
                     value={item.displayValue}
                     background={item.value}
-                    key={Math.random() * 2000}
+                    key={index + 160 + this.RandomIndex}
                     scale={this.props.scale}
-                    checked={() =>this.checkSelectedAttribute(
+                    checked={this.checkSelectedAttribute(
                       this.state.productId,
                       attribute.name,
                       item.displayValue
                     )}
-
                     onChange={() => {
                       this.handleChange(attribute.name, item.displayValue);
                     }}
@@ -117,7 +116,7 @@ class ProductAttribute extends Component {
                     htmlFor={
                       this.state.productId + attribute.name + item.displayValue
                     }
-                    key={index + 200}
+                    key={index + 170 + this.RandomIndex}
                   >
                     {item.displayValue}
                   </label>
@@ -172,7 +171,7 @@ const StyledCustomCheckbox = styled.input`
     justify-content: center;
     text-align: center;
     color: #333;
-    border: solid black 2px;
+    border: solid black 1px;
     width: calc(${(props) => props.scale}*4rem);
     height: calc(${(props) => props.scale}*3rem);
     font-weight: 400;

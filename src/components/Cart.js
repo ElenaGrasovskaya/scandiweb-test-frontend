@@ -53,13 +53,13 @@ class Cart extends Component {
 
         <CartPopup clicked={this.state.clicked}>
           {this.props.cart.cartItems.map((item, index) => (
-            <StyledCartItem key={index + 200}>
-              <StyledItemDescription key={index + 600}>
-                <h2 key={index + 700}>
+            <StyledCartItem key={index + 10}>
+              <StyledItemDescription key={index + 20}>
+                <h2 key={index + 30}>
                   {item.brand}
                   <br /> {item.name}
                 </h2>
-                <h3 key={index + 800}>
+                <h3 key={index + 40}>
                   Price:{" "}
                   {item.prices.map((price) => {
                     if (
@@ -76,15 +76,15 @@ class Cart extends Component {
                   })}
                 </h3>
                 <ProductAttribute
-                  key={index + 100}
+                  key={index + 50}
                   attributes={item.attributes}
                   productId={item.id}
                   scale={0.6}
                 ></ProductAttribute>
               </StyledItemDescription>
-              <StyledQuantity key={index + 500}>
+              <StyledQuantity key={index + 60}>
                 <button
-                  key={index + 900}
+                  key={index + 90}
                   onClick={() => {
                     this.handleChangeQty(item.name, item.qty + 1);
                     this.setState({ total: this.calculateSumm() });
@@ -107,9 +107,9 @@ class Cart extends Component {
                 </button>
               </StyledQuantity>
               <div>
-                <StyledItemPreview key={index + 300} src={item.gallery[0]} />
+                <StyledItemPreview key={index + 70} src={item.gallery[0]} />
               </div>
-              <StyledQuantity key={index + 400}>
+              <StyledQuantity key={index + 80}>
                 <button
                   onClick={() => {
                     this.handleRemoveFromCart(item.name);
@@ -134,8 +134,18 @@ class Cart extends Component {
             <span>Total:</span> <span>{this.calculateSumm()}</span>
           </StyledTotal>
           <StyledTotal>
-            <Link to="/cart" onClick={() => this.setState({ clicked: !this.state.clicked })}><StyledSubmitButton>view bag</StyledSubmitButton></Link>
-            <Link to="/" onClick={() => this.setState({ clicked: !this.state.clicked })}><StyledSubmitButton>check out</StyledSubmitButton></Link>
+            <Link
+              to='/cart'
+              onClick={() => this.setState({ clicked: !this.state.clicked })}
+            >
+              <StyledSubmitButton>view bag</StyledSubmitButton>
+            </Link>
+            <Link
+              to='/'
+              onClick={() => this.setState({ clicked: !this.state.clicked })}
+            >
+              <StyledSubmitButton>check out</StyledSubmitButton>
+            </Link>
           </StyledTotal>
         </CartPopup>
         <StyledBackground clicked={this.state.clicked}></StyledBackground>
@@ -228,7 +238,7 @@ const StyledCartItem = styled.div`
 
   display: flex;
   flex-direction: row;
-  border-top:1px solid lightgrey;
+  border-top: 1px solid lightgrey;
 `;
 
 const StyledItemDescription = styled.div`
@@ -238,7 +248,8 @@ const StyledItemDescription = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 2rem;
-  & h2, h3{
+  & h2,
+  h3 {
     font-size: 0.8rem;
   }
 `;
@@ -254,28 +265,25 @@ const StyledTotal = styled.h2`
   justify-content: space-between;
   margin: 2rem;
   font-size: 1rem;
-  
 `;
 
 const StyledSubmitButton = styled.button`
-    width: 15rem;
-    height: 3rem;
-    text-transform: uppercase;
-    font-size: 1rem;
-    background-color: var(--green);
-    color: white;
-    border: none;
-    border-radius: none;
-    font-weight: 500;
-    &:hover,
-    :active {
-      background-color: white;
-      color: black;
-      border: 1px solid black;
-    }
+  width: 15rem;
+  height: 3rem;
+  text-transform: uppercase;
+  font-size: 1rem;
+  background-color: var(--green);
+  color: white;
+  border: none;
+  border-radius: none;
+  font-weight: 500;
+  &:hover,
+  :active {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+  }
 `;
-
-
 
 const StyledQuantity = styled.div`
   color: black;

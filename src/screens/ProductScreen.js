@@ -65,10 +65,10 @@ class ProductScreen extends Component {
               <StyledImagePicker>
                 {product.gallery.map((image, index) => (
                   <a
-                    key={index + 500}
+                    key={index + 280}
                     onClick={() => this.setState({ currentImage: image })}
                   >
-                    <img src={image} key={index + 600} />
+                    <img  src={image} key={index + 290} />
                   </a>
                 ))}
               </StyledImagePicker>
@@ -79,7 +79,7 @@ class ProductScreen extends Component {
             <StyledProductDetails>
               <h1>{product.brand}</h1>
               <h2>{product.name}</h2>
-              <ProductAttribute
+              <ProductAttribute 
                 scale={1}
                 attributes={product.attributes}
                 productId={product.id}

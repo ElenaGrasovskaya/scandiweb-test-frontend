@@ -38,7 +38,7 @@ class Category extends Component {
       <>
         <StyledList onLoad={() => this.handleCategoryLoadList(categoryList)}>
           {categoryList.map((category, index) => (
-            <StyledItem key={index}>
+            <StyledItem key={index+100}>
               <StyledLink
                 to={"/"}
                 onClick={() => this.handleChangeCategory(category)}
