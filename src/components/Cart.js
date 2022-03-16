@@ -86,7 +86,7 @@ class Cart extends Component {
                 <button
                   key={index + 90}
                   onClick={() => {
-                    this.handleChangeQty(item.name, Number(item.qty + 1));
+                    this.handleChangeQty(item.name, Number(+item.qty + 1));
                     this.setState({ total: this.calculateSumm() });
                   }}
                 >

@@ -110,7 +110,7 @@ class ProductScreen extends Component {
                     min='1'
                     max='100'
                     onChange={(event) =>
-                      this.setState({ qty: event.target.value })
+                      this.setState({ qty: Number(event.target.value) })
                     }
                   ></input>
                 </StyledQuantity>
