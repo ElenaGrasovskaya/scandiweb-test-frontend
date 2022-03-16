@@ -68,7 +68,7 @@ class ProductScreen extends Component {
                     key={index + 280}
                     onClick={() => this.setState({ currentImage: image })}
                   >
-                    <img  src={image} key={index + 290} />
+                    <img src={image} key={index + 290} />
                   </a>
                 ))}
               </StyledImagePicker>
@@ -79,23 +79,23 @@ class ProductScreen extends Component {
             <StyledProductDetails>
               <h1>{product.brand}</h1>
               <h2>{product.name}</h2>
-              <ProductAttribute 
+              <ProductAttribute
                 scale={1}
                 attributes={product.attributes}
                 productId={product.id}
               ></ProductAttribute>
               <StyledPrice>
                 Price:
-                {product.prices.map((price) => {
+                {product.prices.map((price, index) => {
                   if (
                     price.currency.label ===
                     this.props.currency.currentCurrency.label
                   ) {
                     return (
-                      <>
+                      <p key={index+320}>
                         {price.amount}
                         {price.currency.symbol}
-                      </>
+                      </p>
                     );
                   }
                 })}

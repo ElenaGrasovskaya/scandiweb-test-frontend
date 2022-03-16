@@ -61,13 +61,13 @@ class Cart extends Component {
                 </h2>
                 <h3 key={index + 40}>
                   Price:{" "}
-                  {item.prices.map((price) => {
+                  {item.prices.map((price, index) => {
                     if (
                       price.currency.label ===
                       this.props.currency.currentCurrency.label
                     ) {
                       return (
-                        <div>
+                        <div  key={index + 330}>
                           {price.amount}
                           {price.currency.symbol}
                         </div>
@@ -131,7 +131,7 @@ class Cart extends Component {
             </span>
           </StyledTotal>
           <StyledTotal>
-            <span>Total:</span> <span>{this.calculateSumm()}</span>
+            <span>Total:</span> <span>{this.props.currency.currentCurrency.symbol}{this.calculateSumm()}</span>
           </StyledTotal>
           <StyledTotal>
             <Link
