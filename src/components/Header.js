@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import Currency from "./Currency";
 import Category from "./Category";
 import Cart from "./Cart";
@@ -21,7 +21,7 @@ const StyledLogo = styled.div`
   margin: auto;
 `;
 
-class Header extends Component {
+class Header extends PureComponent {
   render() {
     return (
       <>

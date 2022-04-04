@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
@@ -41,17 +41,45 @@ const PRODUCT_DETAILS_QUERY = gql`
   }
 `;
 
-class ProductScreen extends Component {
+class ProductScreen extends PureComponent {
   constructor(props) {
     super(props);
+
     this.state = {
       currentImage: "",
       qty: 1,
+      selectedAttributes: [],
     };
   }
-  handleAddToCart = (product, qty) => {
-    this.props.addToCart(product, qty);
+
+  defaultAttributes = (product) => {
+    if (!product) return [];
+    let defaultAttr = [];
+    product.attributes.map((attribute) =>
+      defaultAttr.push({
+        attribute: attribute.name,
+        value: attribute.items[0].displayValue,
+      })
+    );
+
+    return [...defaultAttr];
   };
+
+  handleAddToCart = (product, qty, selectedAttributes) => {
+    const newSelectedAttributes = JSON.parse(JSON.stringify(selectedAttributes));
+    this.props.addToCart(product, qty, newSelectedAttributes);
+  };
+  handleChangeAttributes = (selectedAttributes) => {
+    this.setState({ selectedAttributes: selectedAttributes });
+  };
+
+  componentDidMount() {
+    this.setState({
+      selectedAttributes: this.defaultAttributes(
+        this.props.product.currentProduct || [{ attributes: [] }]
+      ),
+    });
+  }
 
   render() {
     const { loading, error } = this.props.data;
@@ -83,6 +111,8 @@ class ProductScreen extends Component {
                 scale={1}
                 attributes={product.attributes}
                 productId={product.id}
+                selectedAttributes={this.defaultAttributes() || []}
+                getNewAttributes={this.handleChangeAttributes}
               ></ProductAttribute>
               <StyledPrice>
                 Price:
@@ -92,8 +122,8 @@ class ProductScreen extends Component {
                     this.props.currency.currentCurrency.label
                   ) {
                     return (
-                      <p key={index+320}>
-                        {price.amount}
+                      <p key={index + 320}>
+                        {price.amount.toFixed(2)}
                         {price.currency.symbol}
                       </p>
                     );
@@ -114,13 +144,17 @@ class ProductScreen extends Component {
                     }
                   ></input>
                 </StyledQuantity>
-
                 <StyledButton
                   inStock={product.inStock}
                   onClick={(event) => {
                     event.preventDefault();
+
                     product.inStock &&
-                      this.handleAddToCart(product, this.state.qty);
+                      this.handleAddToCart(
+                        product,
+                        this.state.qty,
+                        this.state.selectedAttributes
+                      );
                   }}
                 >
                   add to cart

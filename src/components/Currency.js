@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { changeCurrency, currencyLoadList } from "../actions/currencyActions";
@@ -15,7 +15,7 @@ const CURRENCY_LIST_QUERY = gql`
   }
 `;
 
-class Currency extends Component {
+class Currency extends PureComponent {
   handleChangeCurrency = (label, symbol) => {
     return this.props.changeCurrency(label, symbol);
   };

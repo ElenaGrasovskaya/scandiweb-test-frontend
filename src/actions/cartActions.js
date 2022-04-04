@@ -6,25 +6,27 @@ export const addToCart = (product, qty, selectedAttributes) => (dispatch, getSta
     type: CART_ADD_ITEM,
     product: {
       ...product,
-      qty
+      qty,
+      selectedAttributes
     },
   });
 
   localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };
 
-export const removeFromCart = (name) => (dispatch, getState) => {
+export const removeFromCart = (name, selectedAttributes) => (dispatch, getState) => {
   dispatch({
     type: CART_REMOVE_ITEM,
-    payload: name,
+    payload:{ itemName:name, attributes:selectedAttributes},
+
   });
   localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };
 
-export const changeItemQTY = (name, qty) => (dispatch, getState) => {
+export const changeItemQTY = (name, selectedAttributes, qty ) => (dispatch, getState) => {
   dispatch({
     type: CART_CHANGE_QTY,
-    payload: {itemName: name, newQty: qty},
+    payload: {itemName: name, newQty: qty, attributes:selectedAttributes},
   });
   localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 };

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import Product from "../components/Product";
@@ -42,7 +42,7 @@ const PRODUCTS_LIST_QUERY = gql`
 `;
 
 
-class HomeScreen extends Component {
+class HomeScreen extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { currentCategory: [] };

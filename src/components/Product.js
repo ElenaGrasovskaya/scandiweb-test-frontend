@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -8,7 +8,7 @@ import { addToCart } from "../actions/cartActions";
 import { saveSelectedAttributes } from "../actions/currentProductActions";
 import { bindActionCreators } from "redux";
 
-class Product extends Component {
+class Product extends PureComponent {
   constructor(props) {
     super(props);
     this.defaultAttributes = () => {
@@ -19,15 +19,15 @@ class Product extends Component {
           value: attribute.items[0].displayValue,
         })
       );
-      alert(this.props.displayedProduct.id);
+
       return {
         attributes: [...defaultAttr],
         productId: this.props.displayedProduct.id,
       };
     };
   }
-  handleAddToCart = (product, qty) => {
-    this.props.addToCart(product, qty);
+  handleAddToCart = (product, qty, selectedAttributes) => {
+    this.props.addToCart(product, qty, selectedAttributes);
   };
 
   render() {
@@ -38,17 +38,23 @@ class Product extends Component {
     );
 
     return (
-      <StyledProduct>
+      <StyledProduct inStock={inStock}>
         <StyledCartIcon
           inStock={inStock}
           src={cart}
           onClick={() => {
-            inStock&&this.handleAddToCart(this.props.displayedProduct, 1);
+            inStock &&
+              this.handleAddToCart(
+                this.props.displayedProduct,
+                1,
+                this.defaultAttributes().attributes
+              );
           }}
         ></StyledCartIcon>
 
         <StyledLink to={`/product/${id}`}>
           <StyledProductImage
+            inStock={inStock}
             src={gallery[0]}
             height='300px'
           ></StyledProductImage>
@@ -59,10 +65,10 @@ class Product extends Component {
               price.currency.label === this.props.currency.currentCurrency.label
             )
               return (
-                <p key={index+120}>
+                <p key={index + 120}>
                   <strong>
                     {price.currency.symbol}
-                    {price.amount}
+                    {price.amount.toFixed(2)}
                   </strong>
                 </p>
               );
@@ -98,7 +104,8 @@ const StyledCartIcon = styled.img`
   padding: 1rem;
   object-fit: contain;
   border-radius: 50%;
-  background-color:  ${(props) => props.inStock?"var(--green)":"lightgrey"};
+  background-color: ${(props) =>
+    props.inStock ? "var(--green)" : "lightgrey"};
   opacity: 0%;
   transition: opacity 0.2s ease-in;
 `;
@@ -110,6 +117,7 @@ const StyledProduct = styled.div`
   height: 27rem;
   padding: 1rem;
   text-decoration: none;
+  opacity:  ${(props) => (props.inStock ? 1 : 0.5)};
 
   &:hover,
   &:active,
@@ -119,6 +127,24 @@ const StyledProduct = styled.div`
       opacity: 100%;
     }
   }
+  &::after {
+    content: "out of stock";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20rem;
+    height: 20rem;
+
+    text-transform: uppercase;
+    width: 22rem;
+    opacity: 60%;
+    padding-top: 40%;
+
+    font-size: 2rem;
+    color: black;
+    text-align: center;
+    display: ${(props) => (props.inStock ? "none" : "block")};
+  }
 `;
 
 const StyledProductImage = styled.img`
@@ -127,6 +153,7 @@ const StyledProductImage = styled.img`
   object-fit: contain;
   overflow: hidden;
   border: 1px solid #eee;
+ 
 `;
 
 const StyledProductName = styled.h2`

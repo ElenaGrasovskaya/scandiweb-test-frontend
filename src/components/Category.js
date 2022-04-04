@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
@@ -14,7 +14,7 @@ const CATEGORY_LIST_QUERY = gql`
     }
   }
 `;
-class Category extends Component {
+class Category extends PureComponent {
   handleChangeCategory = (newCategory) => {
     return this.props.changeCategory(newCategory);
   };

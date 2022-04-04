@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import cart_black from "../assets/cart_black.png";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -7,18 +7,22 @@ import { bindActionCreators } from "redux";
 import { removeFromCart, changeItemQTY } from "../actions/cartActions";
 import ProductAttribute from "./ProductAttribute";
 
-class Cart extends Component {
+class Cart extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { clicked: false, total: this.calculateSumm() };
+    this.state = {
+      clicked: false,
+      total: this.calculateSumm(),
+      selectedAttributes: [],
+    };
   }
 
-  handleRemoveFromCart = (productName) => {
-    this.props.removeFromCart(productName);
+  handleRemoveFromCart = (productName, selectedAttributes) => {
+    this.props.removeFromCart(productName, selectedAttributes);
   };
 
-  handleChangeQty = (productName, newQty) => {
-    this.props.changeItemQTY(productName, newQty);
+  handleChangeQty = (productName, selectedAttributes, newQty) => {
+    this.props.changeItemQTY(productName, selectedAttributes, newQty);
   };
 
   calculateSumm = () => {
@@ -34,6 +38,10 @@ class Cart extends Component {
     });
 
     return summ.toFixed(2);
+  };
+  handleChangeAttributes = (selectedAttributes) => {
+
+    this.setState({ selectedAttributes: selectedAttributes });
   };
 
   render() {
@@ -67,8 +75,8 @@ class Cart extends Component {
                       this.props.currency.currentCurrency.label
                     ) {
                       return (
-                        <div  key={index + 330}>
-                          {price.amount}
+                        <div key={index + 330}>
+                          {price.amount.toFixed(2)}
                           {price.currency.symbol}
                         </div>
                       );
@@ -80,13 +88,15 @@ class Cart extends Component {
                   attributes={item.attributes}
                   productId={item.id}
                   scale={0.6}
+                  selectedAttributes={item.selectedAttributes || []}
+                  getNewAttributes={this.handleChangeAttributes}
                 ></ProductAttribute>
               </StyledItemDescription>
               <StyledQuantity key={index + 60}>
                 <button
                   key={index + 90}
                   onClick={() => {
-                    this.handleChangeQty(item.name, Number(+item.qty + 1));
+                    this.handleChangeQty(item.name, item.selectedAttributes, Number(+item.qty + 1));
                     this.setState({ total: this.calculateSumm() });
                   }}
                 >
@@ -97,8 +107,8 @@ class Cart extends Component {
                 <button
                   onClick={() => {
                     this.handleChangeQty(
-                      item.name,
-                      item.qty - 1 < 1 ? 1 : item.qty - 1
+                      item.name, item.selectedAttributes,
+                      item.qty - 1 < 1 ? this.handleRemoveFromCart(item.name, item.selectedAttributes || []) : item.qty - 1
                     );
                     this.setState({ total: this.calculateSumm() });
                   }}
@@ -109,16 +119,7 @@ class Cart extends Component {
               <div>
                 <StyledItemPreview key={index + 70} src={item.gallery[0]} />
               </div>
-              <StyledQuantity key={index + 80}>
-                <button
-                  onClick={() => {
-                    this.handleRemoveFromCart(item.name);
-                    this.setState({ total: this.calculateSumm() });
-                  }}
-                >
-                  X
-                </button>
-              </StyledQuantity>
+             
             </StyledCartItem>
           ))}
           <StyledTotal>
@@ -131,7 +132,11 @@ class Cart extends Component {
             </span>
           </StyledTotal>
           <StyledTotal>
-            <span>Total:</span> <span>{this.props.currency.currentCurrency.symbol}{this.calculateSumm()}</span>
+            <span>Total:</span>{" "}
+            <span>
+              {this.props.currency.currentCurrency.symbol}
+              {this.calculateSumm()}
+            </span>
           </StyledTotal>
           <StyledTotal>
             <Link

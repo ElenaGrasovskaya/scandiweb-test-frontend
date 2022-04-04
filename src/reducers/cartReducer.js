@@ -10,7 +10,14 @@ export const cartReducer = (state = { cart: { cartItems: [] } }, action) => {
   switch (action.type) {
     case CART_ADD_ITEM:
       const item = action.product;
-      const existItem = state.cartItems.find((x) => x.name === item.name);
+      const existItem = state.cartItems.find(
+        (x) =>
+          x.name === item.name &&
+          JSON.stringify(x.selectedAttributes) ===
+            JSON.stringify(item.selectedAttributes)
+      );
+
+
       if (existItem) {
         return {
           ...state,
@@ -21,26 +28,46 @@ export const cartReducer = (state = { cart: { cartItems: [] } }, action) => {
       } else {
         return {
           ...state,
-          cartItems: [...state.cartItems, item],
+          cartItems: [...state.cartItems, action.product],
         };
       }
 
     case CART_REMOVE_ITEM:
       return {
         ...state,
-        cartItems: state.cartItems.filter((x) => x.name !== action.payload),
+        cartItems: state.cartItems.filter(
+          (x) =>
+            x.name !== action.payload.name &&
+            JSON.stringify(x.selectedAttributes) !==
+              JSON.stringify(action.payload.attributes)
+        ),
       };
 
     case CART_CHANGE_QTY:
-      const selectedProducts = state.cartItems.map((x) => {
-        if (x.name === action.payload.itemName)
-          return { ...x, qty: action.payload.newQty };
-        else return { ...x };
-      });
+      const {itemName, newQty, attributes}=action.payload;
+
+  
+      const selectedProduct = state.cartItems.find(
+        (x) =>
+          x.name === itemName &&
+          JSON.stringify(x.selectedAttributes) ===
+            JSON.stringify(attributes)
+      );
+      selectedProduct.qty = newQty;
+
+
       return {
         ...state,
-        cartItems: [...selectedProducts],
+        cartItems: state.cartItems.map((x) =>
+          ( x.name === selectedProduct.name &&
+            JSON.stringify(x.selectedAttributes) ===
+              JSON.stringify(selectedProduct.selectedAttributes)) ? selectedProduct : x
+        ),
       };
+
+
+
+
 
     case CART_CLEAR_ITEMS:
       return {

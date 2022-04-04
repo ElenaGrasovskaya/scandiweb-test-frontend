@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { saveSelectedAttributes } from "../actions/currentProductActions";
 
-class ProductAttribute extends Component {
+class ProductAttribute extends PureComponent {
   constructor(props) {
     super(props);
     this.RandomIndex = Math.random() * 10000;
@@ -13,7 +13,7 @@ class ProductAttribute extends Component {
       // if not, default values are assigned as attributes
       let preState = [];
 
-      this.props.product.selectedAttributes.forEach((item) => {
+      this.props.selectedAttributes.forEach((item) => {
         if (item.productId === this.props.productId) {
           preState = [...item.attributes];
         }
@@ -56,29 +56,40 @@ class ProductAttribute extends Component {
       attributes: [...newState],
       productId: this.props.productId,
     });
+
+    this.props.getNewAttributes(this.state.attributes);
+
     this.handleSaveSelectedAttributes(
       this.state.productId,
       this.state.attributes
     );
   };
-  checkSelectedAttribute = (productId, attributeName, value) => {
+  checkSelectedAttribute = (attributeName, value) => {
     //this check defines which options
-    //are highlighted in radio button sets
+    //should be highlighted in radio button sets
     let checked = false;
-    this.props.product.selectedAttributes.forEach((pair) => {
-      if (pair.productId === productId) {
-        pair.attributes.forEach((attribute) => {
-          if (
-            attribute.attribute === attributeName &&
-            attribute.value === value
-          ) {
-            checked = true;
-            return;
-          }
-        });
-      }
-      if (checked) return;
-    });
+ 
+    if (this.props.scale==1)
+    {
+      
+      this.state.attributes.forEach((pair) => {
+        if (pair.attribute === attributeName && pair.value === value) {
+          checked = true;
+          return;
+        }
+      });
+    }
+
+    else{
+
+      this.props.selectedAttributes.forEach((pair) => {
+
+        if (pair.attribute === attributeName && pair.value === value) {
+          checked = true;
+          return;
+        }
+      });
+    }
 
     return checked;
   };
@@ -103,14 +114,13 @@ class ProductAttribute extends Component {
                   <StyledCustomCheckbox
                     type='radio'
                     id={
-                      this.state.productId + attribute.name + item.displayValue
+                      this.state.productId + attribute.name + item.displayValue + this.RandomIndex
                     }
                     name={this.state.productId + attribute.name}
                     value={item.displayValue}
                     background={item.value}
                     scale={this.props.scale}
                     checked={this.checkSelectedAttribute(
-                      this.state.productId,
                       attribute.name,
                       item.displayValue
                     )}
@@ -119,8 +129,9 @@ class ProductAttribute extends Component {
                     }}
                   ></StyledCustomCheckbox>
                   <label
+                    key={this.RandomIndex}
                     htmlFor={
-                      this.state.productId + attribute.name + item.displayValue
+                      this.state.productId + attribute.name + item.displayValue + this.RandomIndex
                     }
                   >
                     {item.displayValue}
