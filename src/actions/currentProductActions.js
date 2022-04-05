@@ -8,7 +8,3 @@ export const saveCurrentProduct = (currentProduct) => ({
   currentProduct: { ...currentProduct },
 });
 
-export const saveSelectedAttributes = (productId, attributes) => ({
-  type: CURRENT_PRODUCT_ATTRIBUTES,
-  selectedAttributes: { attributes: [...attributes], productId: productId },
-});

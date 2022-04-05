@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import ProductAttribute from "../components/ProductAttribute";
 import { addToCart } from "../actions/cartActions";
@@ -43,6 +42,7 @@ class ProductScreen extends PureComponent {
     const newSelectedAttributes = JSON.parse(
       JSON.stringify(selectedAttributes)
     );
+
     this.props.addToCart(product, qty, newSelectedAttributes);
   };
   handleChangeAttributes = (selectedAttributes) => {
@@ -60,16 +60,16 @@ class ProductScreen extends PureComponent {
             <StyledProductGallery>
               <StyledImagePicker>
                 {product.gallery.map((image, index) => (
-                  <a
+                  <a href={"#"}
                     key={index + 280}
                     onClick={() => this.setState({ currentImage: image })}
                   >
-                    <img src={image} key={index + 290} />
+                    <img src={image} key={index + 290}  alt={product.name}/>
                   </a>
                 ))}
               </StyledImagePicker>
               <StyledImageView>
-                <img src={this.state.currentImage || product.gallery[0]}></img>
+                <img src={this.state.currentImage || product.gallery[0]}  alt={product.name}></img>
               </StyledImageView>
             </StyledProductGallery>
             <StyledProductDetails>
@@ -79,7 +79,7 @@ class ProductScreen extends PureComponent {
                 scale={1}
                 attributes={product.attributes}
                 productId={product.id}
-                selectedAttributes={this.defaultAttributes() || []}
+                selectedAttributes={this.defaultAttributes(product)}
                 getNewAttributes={this.handleChangeAttributes}
               ></ProductAttribute>
               <StyledPrice>
@@ -95,7 +95,7 @@ class ProductScreen extends PureComponent {
                         {price.currency.symbol}
                       </p>
                     );
-                  }
+                  } else return null;
                 })}
               </StyledPrice>
               <form>

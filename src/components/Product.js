@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import cart from "../assets/cart.png";
 import { addToCart } from "../actions/cartActions";
-import { saveSelectedAttributes } from "../actions/currentProductActions";
 import { bindActionCreators } from "redux";
 
 class Product extends PureComponent {
@@ -86,7 +85,6 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       addToCart,
-      saveSelectedAttributes,
     },
     dispatch
   );

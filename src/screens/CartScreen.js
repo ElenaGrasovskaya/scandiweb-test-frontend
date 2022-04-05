@@ -6,6 +6,14 @@ import { removeFromCart, changeItemQTY } from "../actions/cartActions";
 import { bindActionCreators } from "redux";
 
 class CartScreen extends PureComponent {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selectedAttributes: [],
+    };
+  }
   handleRemoveFromCart = (productName) => {
     this.props.removeFromCart(productName);
   };
@@ -15,8 +23,8 @@ class CartScreen extends PureComponent {
   };
 
   handleChangeAttributes = (selectedAttributes) => {
-    console.log("new attributes in cart", selectedAttributes);
-    //this.setState({ selectedAttributes: selectedAttributes });
+
+    this.setState({ selectedAttributes: selectedAttributes });
   };
 
   render() {
@@ -28,7 +36,7 @@ class CartScreen extends PureComponent {
             <StyledItemDescription key={index + 190}>
               <h2 key={index + 200}>
                 {item.brand}
-                <br /> {item.name}
+                <br key={index + 470} /> {item.name}
               </h2>
               <h3 key={index + 210}>
                 Price:{" "}
@@ -38,12 +46,13 @@ class CartScreen extends PureComponent {
                     this.props.currency.currentCurrency.label
                   ) {
                     return (
-                      <>
+                      <div key={index + 480}>
                         {price.amount.toFixed(2)}
                         {price.currency.symbol}
-                      </>
+                      </div>
                     );
                   }
+                  else return null;
                 })}
               </h3>
               <ProductAttribute
@@ -55,35 +64,40 @@ class CartScreen extends PureComponent {
                 getNewAttributes={this.handleChangeAttributes}
               ></ProductAttribute>
             </StyledItemDescription>
-            <StyledPreviewBlock>
+            <StyledPreviewBlock key={index + 430}>
               <StyledQuantity key={index + 230}>
                 <button
                   key={index + 240}
-                  onClick={() => this.handleChangeQty(item.name, item.selectedAttributes, item.qty + 1)}
+                  onClick={() =>
+                    this.handleChangeQty(
+                      item.name,
+                      item.selectedAttributes,
+                      item.qty + 1
+                    )
+                  }
                 >
                   +
                 </button>
                 {item.qty < 1 ? 1 : item.qty}
 
                 <button
+                  key={index + 440}
                   onClick={() =>
                     this.handleChangeQty(
-                      item.name, item.selectedAttributes,
-                      item.qty - 1 < 1 ? this.handleRemoveFromCart(item.name) : item.qty - 1
+                      item.name,
+                      item.selectedAttributes,
+                      item.qty - 1 < 1
+                        ? this.handleRemoveFromCart(item.name)
+                        : item.qty - 1
                     )
                   }
                 >
                   -
                 </button>
               </StyledQuantity>
-              <div>
+              <div key={index + 450}>
                 <StyledItemPreview key={index + 250} src={item.gallery[0]} />
               </div>
-              <StyledQuantity key={index + 260}>
-                <button onClick={() => this.handleRemoveFromCart(item.name, item.selectedAttributes)}>
-                  X
-                </button>
-              </StyledQuantity>
             </StyledPreviewBlock>
           </StyledCartItem>
         ))}

@@ -1,12 +1,10 @@
 import React, { PureComponent } from "react";
 import { graphql } from "react-apollo";
 import Product from "../components/Product";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { saveCurrentProduct } from "../actions/currentProductActions";
 import { bindActionCreators } from "redux";
-import { saveSelectedAttributes } from "../actions/currentProductActions";
 import { PRODUCTS_LIST_QUERY} from "../queries/productListQuery";
 
 
@@ -81,7 +79,6 @@ const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
       saveCurrentProduct,
-      saveSelectedAttributes,
     },
     dispatch
   );

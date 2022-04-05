@@ -13,32 +13,7 @@ export const currentProductReducer = (state = {}, action) => {
         },
       };
 
-    case CURRENT_PRODUCT_ATTRIBUTES:
-      const newAttributeID = action.selectedAttributes.productId;
-
-      const existItem = state.selectedAttributes.findIndex(
-        (x) => x.productId === newAttributeID
-      );
-
-      if (existItem != -1) {
-        return {
-          ...state,
-          selectedAttributes: state.selectedAttributes.map((item) => {
-            if (item.productId === newAttributeID) {
-              return action.selectedAttributes;
-            } else return item;
-          }),
-        };
-      } else {
-        return {
-          ...state,
-          selectedAttributes: [
-            ...state.selectedAttributes,
-            action.selectedAttributes,
-          ],
-        };
-      }
-
+   
     default:
       return state;
   }

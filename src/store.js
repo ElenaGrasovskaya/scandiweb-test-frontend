@@ -34,7 +34,7 @@ const initialState = {
   cart: { cartItems: cartItemsFromStorage },
   category: { categories: [], currentCategory: currentCategoryFromStorage },
   currency: { currentCurrency: {label:currentCurrencyLabel, symbol:currentCurrencySymbol}, currencies: []},
-  product: { currentProduct:{}, selectedAttributes:[] },
+  product: { currentProduct:{}},
 };
 
 const middleware = [thunk];

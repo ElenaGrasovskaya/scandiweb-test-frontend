@@ -1,8 +1,7 @@
 import React, { PureComponent } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { saveSelectedAttributes } from "../actions/currentProductActions";
+
 
 class ProductAttribute extends PureComponent {
   constructor(props) {
@@ -20,7 +19,7 @@ class ProductAttribute extends PureComponent {
       });
 
       if (preState.length < 2) {
-        this.props.attributes.map((attribute) => {
+        this.props.attributes.forEach((attribute) => {
           preState.push({
             attribute: attribute.name,
             value: attribute.items[0].displayValue,
@@ -34,15 +33,13 @@ class ProductAttribute extends PureComponent {
       attributes: [...this.prepareState()],
       productId: this.props.productId,
     };
-    this.props.saveSelectedAttributes(
-      //either default or modified values are sent to the store
-      this.state.productId,
-      this.state.attributes
-    );
+      
   }
-  handleSaveSelectedAttributes = (productId, attributes) => {
-    this.props.saveSelectedAttributes(productId, attributes);
-  };
+  componentDidMount() {
+    this.props.getNewAttributes(this.state.attributes);
+
+  }
+
 
   handleChange = (attribute, value) => {
     const newState = this.state.attributes.map((pair) => {
@@ -59,31 +56,22 @@ class ProductAttribute extends PureComponent {
 
     this.props.getNewAttributes(this.state.attributes);
 
-    this.handleSaveSelectedAttributes(
-      this.state.productId,
-      this.state.attributes
-    );
+
   };
   checkSelectedAttribute = (attributeName, value) => {
     //this check defines which options
     //should be highlighted in radio button sets
     let checked = false;
- 
-    if (this.props.scale==1)
-    {
-      
+
+    if (this.props.scale === 1) {
       this.state.attributes.forEach((pair) => {
         if (pair.attribute === attributeName && pair.value === value) {
           checked = true;
           return;
         }
       });
-    }
-
-    else{
-
+    } else {
       this.props.selectedAttributes.forEach((pair) => {
-
         if (pair.attribute === attributeName && pair.value === value) {
           checked = true;
           return;
@@ -95,6 +83,7 @@ class ProductAttribute extends PureComponent {
   };
 
   render() {
+
     return (
       <div>
         {this.props.attributes.map((attribute, index) => (
@@ -113,8 +102,12 @@ class ProductAttribute extends PureComponent {
                 <div key={index + 300 + this.RandomIndex}>
                   <StyledCustomCheckbox
                     type='radio'
+                    key={index + 400 + this.RandomIndex}
                     id={
-                      this.state.productId + attribute.name + item.displayValue + this.RandomIndex
+                      this.state.productId +
+                      attribute.name +
+                      item.displayValue +
+                      this.RandomIndex
                     }
                     name={this.state.productId + attribute.name}
                     value={item.displayValue}
@@ -129,9 +122,12 @@ class ProductAttribute extends PureComponent {
                     }}
                   ></StyledCustomCheckbox>
                   <label
-                    key={this.RandomIndex}
+                    key={450+this.RandomIndex}
                     htmlFor={
-                      this.state.productId + attribute.name + item.displayValue + this.RandomIndex
+                      this.state.productId +
+                      attribute.name +
+                      item.displayValue +
+                      this.RandomIndex
                     }
                   >
                     {item.displayValue}
@@ -150,15 +146,8 @@ function mapStateToProps(state) {
   return state;
 }
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      saveSelectedAttributes,
-    },
-    dispatch
-  );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductAttribute);
+export default connect(mapStateToProps)(ProductAttribute);
 
 const StyledAttributeName = styled.h2`
   font-family: "Roboto", sans-serif;
