@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 import Product from "../components/Product";
 import { Link } from "react-router-dom";
@@ -8,38 +7,8 @@ import styled from "styled-components";
 import { saveCurrentProduct } from "../actions/currentProductActions";
 import { bindActionCreators } from "redux";
 import { saveSelectedAttributes } from "../actions/currentProductActions";
+import { PRODUCTS_LIST_QUERY} from "../queries/productListQuery";
 
-const PRODUCTS_LIST_QUERY = gql`
-  query PRODUCTS_LIST_QUERY {
-    categories {
-      name
-      products {
-        id
-        name
-        inStock
-        gallery
-        description
-        category
-        attributes {
-          id
-          name
-          type
-          items {
-            displayValue
-          }
-        }
-        prices {
-          currency {
-            label
-            symbol
-          }
-          amount
-        }
-        brand
-      }
-    }
-  }
-`;
 
 
 class HomeScreen extends PureComponent {

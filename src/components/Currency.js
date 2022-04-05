@@ -2,18 +2,11 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { changeCurrency, currencyLoadList } from "../actions/currencyActions";
-import { gql } from "apollo-boost";
+
 import { graphql } from "react-apollo";
 import styled from "styled-components";
+import {CURRENCY_LIST_QUERY} from "../queries/currencyListQuery";
 
-const CURRENCY_LIST_QUERY = gql`
-  query CURRENCY_LIST_QUERY {
-    currencies {
-      label
-      symbol
-    }
-  }
-`;
 
 class Currency extends PureComponent {
   handleChangeCurrency = (label, symbol) => {

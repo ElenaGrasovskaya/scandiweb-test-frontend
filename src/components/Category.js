@@ -3,17 +3,11 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { changeCategory, categoryLoadList } from "../actions/categoryActions";
-import { gql } from "apollo-boost";
+import { CATEGORY_LIST_QUERY } from "../queries/categoryListQuery";
 import { graphql } from "react-apollo";
 import styled from "styled-components";
 
-const CATEGORY_LIST_QUERY = gql`
-  query CATEGORY_LIST_QUERY {
-    categories {
-      name
-    }
-  }
-`;
+
 class Category extends PureComponent {
   handleChangeCategory = (newCategory) => {
     return this.props.changeCategory(newCategory);

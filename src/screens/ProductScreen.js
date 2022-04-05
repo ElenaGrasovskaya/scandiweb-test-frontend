@@ -11,35 +11,7 @@ import ReactHtmlParser, {
   convertNodeToElement,
   htmlparser2,
 } from "react-html-parser";
-
-const PRODUCT_DETAILS_QUERY = gql`
-  query PRODUCT_DETAILS_QUERY($id: String!) {
-    product(id: $id) {
-      name
-      inStock
-      gallery
-      description
-      attributes {
-        id
-        name
-        type
-        items {
-          displayValue
-          value
-          id
-        }
-      }
-      prices {
-        currency {
-          label
-          symbol
-        }
-        amount
-      }
-      brand
-    }
-  }
-`;
+import { PRODUCT_DETAILS_QUERY } from "../queries/productDetailsQuery";
 
 class ProductScreen extends PureComponent {
   constructor(props) {
@@ -53,7 +25,9 @@ class ProductScreen extends PureComponent {
   }
 
   defaultAttributes = (product) => {
-    if (!product) return [];
+    if (!product) {
+      return [];
+    }
     let defaultAttr = [];
     product.attributes.map((attribute) =>
       defaultAttr.push({
@@ -66,20 +40,14 @@ class ProductScreen extends PureComponent {
   };
 
   handleAddToCart = (product, qty, selectedAttributes) => {
-    const newSelectedAttributes = JSON.parse(JSON.stringify(selectedAttributes));
+    const newSelectedAttributes = JSON.parse(
+      JSON.stringify(selectedAttributes)
+    );
     this.props.addToCart(product, qty, newSelectedAttributes);
   };
   handleChangeAttributes = (selectedAttributes) => {
     this.setState({ selectedAttributes: selectedAttributes });
   };
-
-  componentDidMount() {
-    this.setState({
-      selectedAttributes: this.defaultAttributes(
-        this.props.product.currentProduct || [{ attributes: [] }]
-      ),
-    });
-  }
 
   render() {
     const { loading, error } = this.props.data;

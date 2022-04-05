@@ -105,10 +105,12 @@ class Cart extends PureComponent {
                 {item.qty < 1 ? 1 : item.qty}
 
                 <button
-                  onClick={() => {
+                  onClick={() => {if (item.qty-1<1)
+                     this.handleRemoveFromCart(item.name, item.selectedAttributes || []) 
+                    else 
                     this.handleChangeQty(
                       item.name, item.selectedAttributes,
-                      item.qty - 1 < 1 ? this.handleRemoveFromCart(item.name, item.selectedAttributes || []) : item.qty - 1
+                      item.qty - 1
                     );
                     this.setState({ total: this.calculateSumm() });
                   }}
