@@ -5,11 +5,7 @@ import { graphql } from "react-apollo";
 import ProductAttribute from "../components/ProductAttribute";
 import { addToCart } from "../actions/cartActions";
 import { bindActionCreators } from "redux";
-import ReactHtmlParser, {
-  processNodes,
-  convertNodeToElement,
-  htmlparser2,
-} from "react-html-parser";
+import ReactHtmlParser from "react-html-parser";
 import { PRODUCT_DETAILS_QUERY } from "../queries/productDetailsQuery";
 
 class ProductScreen extends PureComponent {
@@ -60,7 +56,7 @@ class ProductScreen extends PureComponent {
             <StyledProductGallery>
               <StyledImagePicker>
                 {product.gallery.map((image, index) => (
-                  <a href={"#"}
+                  <a 
                     key={index + 280}
                     onClick={() => this.setState({ currentImage: image })}
                   >
